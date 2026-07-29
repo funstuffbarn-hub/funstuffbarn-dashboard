@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.funstuffbarn.caddy</string>
+	
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/local/bin/caddy</string>
+		<string>run</string>
+		<string>--config</string>
+		<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard/deploy/Caddyfile</string>
+	</array>
+	
+	<key>WorkingDirectory</key>
+	<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard</string>
+	
+	<key>RunAtLoad</key>
+	<true/>
+	
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+		<key>Crashed</key>
+		<true/>
+	</dict>
+	
+	<key>StandardOutPath</key>
+	<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard/logs/caddy.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard/logs/caddy_error.log</string>
+	
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+	</dict>
+</dict>
+</plist>

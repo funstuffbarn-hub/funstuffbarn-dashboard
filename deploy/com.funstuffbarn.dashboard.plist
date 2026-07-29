@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.funstuffbarn.dashboard</string>
+	
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/local/bin/uvicorn</string>
+		<string>main:app</string>
+		<string>--host</string>
+		<string>0.0.0.0</string>
+		<string>--port</string>
+		<string>8081</string>
+		<string>--log-level</string>
+		<string>info</string>
+	</array>
+	
+	<key>WorkingDirectory</key>
+	<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard</string>
+	
+	<key>RunAtLoad</key>
+	<true/>
+	
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+		<key>Crashed</key>
+		<true/>
+	</dict>
+	
+	<key>StandardOutPath</key>
+	<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard/logs/dashboard.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard/logs/dashboard_error.log</string>
+	
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+		<key>PYTHONPATH</key>
+		<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard</string>
+	</dict>
+	
+	<key>StandardErrorPath</key>
+	<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard/logs/dashboard_error.log</string>
+	
+	<key>StandardOutPath</key>
+	<string>/Users/javiermaldonadocorreaair/Tienda FunStuffBarn/dashboard/logs/dashboard.log</string>
+</dict>
+</plist>

@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block page_title %}Monitoreo del Sistema{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1><i class="bi bi-graph-up me-2"></i>Monitoreo</h1>
+    <div class="d-flex gap-2">
+        <span class="badge bg-success align-self-center" id="systemStatus">Online</span>
+        <button class="btn btn-outline-secondary btn-sm" onclick="location.reload()">
+            <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
+        </button>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="stat-label">Reportes Totales</div>
+            <div class="stat-value">{{ reports_count }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="stat-label">Prompts Archivado</div>
+            <div class="stat-value">{{ prompts_count }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="stat-label">Diseños Catalogados</div>
+            <div class="stat-value">{{ disenos_count }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="stat-label">Último Ciclo</div>
+            <div class="stat-value" id="lastCycle">—</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-terminal me-2"></i>Logs del Coordinador</h5>
+                <div class="btn-group btn-group-sm">
+                    <select class="form-select" id="logLines" onchange="refreshLogs()">
+                        <option value="50">50 líneas</option>
+                        <option value="100" selected>100 líneas</option>
+                        <option value="200">200 líneas</option>
+                        <option value="500">500 líneas</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <pre class="log-entry mb-0 p-3" id="coordinadorLog">{{ logs.coordinador }}</pre>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Logs Rápidos</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <label class="form-label small">Log a ver:</label>
+                    <select class="form-select form-select-sm" id="logSelector" onchange="loadLog()">
+                        <option value="coordinador">coordinador.log</option>
+                        <option value="salida">salida.log</option>
+                        <option value="errores">errores.log</option>
+                    </select>
+                </div>
+                <pre class="log-entry" id="selectedLog" style="max-height: 300px; overflow-y: auto;">{{ logs.salida }}</pre>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-cpu me-2"></i>Estado del Sistema</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0 small" id="systemStatus">
+                    <li class="mb-2"><strong>Reportes:</strong> <span id="statReports">{{ reports_count }}</span></li>
+                    <li class="mb-2"><strong>Prompts:</strong> <span id="statPrompts">{{ prompts_count }}</span></li>
+                    <li class="mb-2"><strong>Diseños:</strong> <span id="statDisenos">{{ disenos_count }}</span></li>
+                    <li class="mb-2"><strong>Última actualización:</strong> <span id="lastUpdate">—</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function refreshLogs() {
+    const lines = document.getElementById('logLines').value;
+    try {
+        const res = await fetch('/api/logs/coordinador?lines=' + lines);
+        const data = await res.json();
+        document.getElementById('coordinadorLog').textContent = data.content;
+    } catch (e) {
+        console.error('Error loading logs:', e);
+    }
+}
+
+async function loadLog() {
+    const log = document.getElementById('logSelector').value;
+    try {
+        const res = await fetch('/api/logs/' + log + '?lines=100');
+        const data = await res.json();
+        document.getElementById('selectedLog').textContent = data.content;
+    } catch (e) {
+        console.error('Error loading log:', e);
+    }
+}
+
+async function updateSystemStatus() {
+    try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        document.getElementById('statReports').textContent = data.total_reports;
+        document.getElementById('statPrompts').textContent = data.prompts_count || '—';
+        document.getElementById('statDisenos').textContent = data.disenos_count || '—';
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleString('es-ES');
+        document.getElementById('lastCycle').textContent = data.latest_report || '—';
+        document.getElementById('systemStatus').className = 'badge ' + (data.env_configured ? 'bg-success' : 'bg-warning');
+        document.getElementById('systemStatus').textContent = data.env_configured ? 'Configurado' : 'Pendiente env';
+    } catch (e) {
+        console.error('Error loading status:', e);
+    }
+}
+
+// Initial load
+document.addEventListener('DOMContentLoaded', () => {
+    updateSystemStatus();
+    refreshLogs();
+    loadLog();
+});
+
+// Auto-refresh every 30 seconds
+setInterval(() => {
+    updateSystemStatus();
+    refreshLogs();
+    loadLog();
+}, 30000);
+</script>
+{% endblock %}

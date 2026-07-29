@@ -1,0 +1,35 @@
+# FunStuffBarn Dashboard - Caddyfile
+# Auto HTTPS with Let's Encrypt (or self-signed for local)
+
+{
+	admin off
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 100mb
+			roll_keep 30
+			roll_keep_for 720h
+		}
+	}
+}
+
+# Local development (HTTP)
+:8080 {
+	root * /Users/javiermaldonadocorreaair/Tienda\ FunStuffBarn/dashboard/static
+	encode zstd gzip
+	
+	# API proxy
+	handle /api/* {
+		reverse_proxy localhost:8081
+	}
+	
+	# Dashboard app
+	handle {
+		reverse_proxy localhost:8081
+	}
+}
+
+# Production with auto HTTPS (uncomment and configure domain)
+# funstuffbarn.com {
+# 	tls admin@funstuffbarn.com
+# 	reverse_proxy localhost:8081
+# }

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# crontab entries for FunStuffBarn Dashboard
+
+# ===========================================
+# CRONTAB ENTRIES - Add to crontab with: crontab -e
+# ===========================================
+
+# Daily backup at 02:00
+0 2 * * * /Users/javiermaldonadocorreaair/Tienda\ FunStuffBarn/dashboard/deploy/backup.sh >> /Users/javiermaldonadocorreaair/Tienda\ FunStuffBarn/dashboard/logs/backup.log 2>&1
+
+# Hourly health check
+0 * * * * curl -sf http://localhost:8080/health > /dev/null || echo "$(date): Health check failed" >> /Users/javiermaldonadocorreaair/Tienda\ FunStuffBarn/dashboard/logs/health.log
+
+# Daily log rotation at 03:00
+0 3 * * * find /Users/javiermaldonadocorreaair/Tienda\ FunStuffBarn/dashboard/logs -name "*.log" -mtime +7 -delete
+
+# Weekly cleanup of old report files (keep 30 days daily, 12 weeks weekly, 12 months monthly)
+0 4 * * 0 /Users/javiermaldonadocorreaair/Tienda\ FunStuffBarn/dashboard/deploy/backup.sh cleanup
+
+# Restart dashboard weekly (Sunday 05:00) to clear memory leaks
+0 5 * * 0 launchctl unload ~/Library/LaunchAgents/com.funstuffbarn.dashboard.plist && sleep 5 && launchctl load ~/Library/LaunchAgents/com.funstuffbarn.dashboard.plist >> /Users/javiermaldonadocorreaair/Tienda\ FunStuffBarn/dashboard/logs/restart.log 2>&1
+
+# Monthly secret rotation reminder (1st of month at 06:00)
+0 6 1 * * echo "$(date): Recordatorio - Rotar secretos (Groq, Etsy, Printful, Gmail)" >> /Users/javiermaldonadocorreaair/Tienda\ FunStuffBarn/dashboard/logs/secret_rotation.log
+
+# ===========================================
+# TO INSTALL:
+# crontab /Users/javiermaldonadocorreaair/Tienda\ FunStuffBarn/dashboard/deploy/crontab.txt
+# ===========================================

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card p-3 h-100">
+            <div class="stat-label">Total Reportes</div>
+            <div class="stat-value">{{ total_reports }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card p-3 h-100">
+            <div class="stat-label">Último Reporte</div>
+            <div class="stat-value text-truncate" style="font-size: 1.25rem;">
+                {% set lr = latest_report|from_json %}
+                {% if lr and lr.prefix %}
+                    {{ lr.prefix }} - {{ lr.date }}
+                {% else %}
+                    —
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card p-3 h-100">
+            <div class="stat-label">Variables de Entorno</div>
+            <div class="stat-value">
+                {% if has_env %}<i class="bi bi-check-circle-fill text-success"></i> Configurado{% else %}<i class="bi bi-x-circle-fill text-danger"></i> Pendiente{% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card p-3 h-100">
+            <div class="stat-label">Prompts Archivado</div>
+            <div class="stat-value">
+                {% set prompts = get_prompt_archive_files() %}
+                {{ prompts|length }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Reportes Recientes</h5>
+                <a href="/reports" class="btn btn-sm btn-outline-primary">Ver todos</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                                <th>Tamaño</th>
+                                <th>Modificado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set reports_list = reports|from_json %}
+                            {% for r in reports_list %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-primary-subtle text-primary">{{ r.prefix }}</span>
+                                </td>
+                                <td>{{ r.date }}</td>
+                                <td>{{ r.size_kb }} KB</td>
+                                <td class="text-muted small">{{ r.modified }}</td>
+                                <td>
+                                    <a href="/reports/{{ r.filename }}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightning-charge me-2"></i>Accesos Rápidos</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/reports" class="btn btn-outline-primary">
+                        <i class="bi bi-file-earmark-text me-2"></i>Ver Reportes
+                    </a>
+                    <a href="/prompts" class="btn btn-outline-warning">
+                        <i class="bi bi-lightning-charge me-2"></i>Prompts Archive
+                    </a>
+                    <a href="/disenos" class="btn btn-outline-info">
+                        <i class="bi bi-images me-2"></i>Catálogo Diseños
+                    </a>
+                    <a href="/secrets" class="btn btn-outline-secondary">
+                        <i class="bi bi-key me-2"></i>Variables de Entorno
+                    </a>
+                    <a href="/monitoring" class="btn btn-outline-dark">
+                        <i class="bi bi-graph-up me-2"></i>Monitoreo
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-graph-up me-2"></i>Resumen del Sistema</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2"><strong>Reportes totales:</strong> {{ total_reports }}</li>
+                    <li class="mb-2"><strong>Último reporte:</strong> 
+                        {% set lr = latest_report|from_json %}
+                        {% if lr and lr.date %}{{ lr.date }}{% else %}—{% endif %}
+                    </li>
+                    <li class="mb-2"><strong>Prompts archivados:</strong> {{ prompts_count }}</li>
+                    <li class="mb-2"><strong>Diseños catalogados:</strong> {{ disenos_count }}</li>
+                    <li class="mb-2"><strong>Variables de entorno:</strong> {% if has_env %}Configurado{% else %}Pendiente{% endif %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

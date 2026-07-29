@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block page_title %}Catálogo de Diseños{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="bi bi-images me-2"></i>Catálogo de Diseños</h1>
+    <div class="d-flex gap-2">
+        <input type="text" class="form-control form-control-sm" style="width: 300px;" id="disenosSearch" placeholder="Buscar diseños...">
+        <select class="form-select form-select-sm" style="width: auto;" id="categoryFilterDisenos">
+            <option value="">Todas las categorías</option>
+            {% for cat in categories %}
+            <option value="{{ cat }}">{{ cat }}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select form-select-sm" style="width: auto;" id="extFilter">
+            <option value="">Todos los formatos</option>
+            <option value=".png">PNG</option>
+            <option value=".jpg">JPG</option>
+            <option value=".svg">SVG</option>
+            <option value=".webp">WEBP</option>
+        </select>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3" id="disenosGrid">
+    {% for d in disenos %}
+    <div class="col diseno-card" data-category="{{ d.category }}" data-name="{{ d.name|lower }}" data-ext="{{ d.ext }}">
+        <div class="card h-100 shadow-sm">
+            {% if d.ext in [".svg"] %}
+            <div class="card-img-top bg-light" style="height: 150px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-filetype-svg display-1 text-primary"></i>
+            </div>
+            {% elif d.ext in [".png", ".jpg", ".jpeg", ".webp", ".bmp", ".tiff"] %}
+            <img src="/disenos/{{ d.relative_path }}" class="card-img-top" alt="{{ d.name }}" style="height: 150px; object-fit: contain; background: #f8f9fa;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="card-img-top bg-light d-none" style="height: 150px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-image display-1 text-secondary"></i>
+            </div>
+            {% else %}
+            <div class="card-img-top bg-light" style="height: 150px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-filetype-{{ d.ext|replace('.', '') }} display-1 text-secondary"></i>
+            </div>
+            {% endif %}
+            <div class="card-footer bg-white border-0 pb-3">
+                <h6 class="card-title mb-1 text-truncate">{{ d.name }}</h6>
+                <div class="d-flex justify-content-between small text-muted">
+                    <span class="badge bg-light text-dark">{{ d.ext.upper() }}</span>
+                    <span>{{ d.size_mb }} MB</span>
+                </div>
+                <div class="text-muted small mt-1">{{ d.modified }}</div>
+                <div class="text-muted small text-truncate">{{ d.category }}</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if disenos|length == 0 %}
+<div class="text-center py-5">
+    <i class="bi bi-images display-1 text-muted"></i>
+    <p class="text-muted mt-3">No se encontraron diseños</p>
+</div>
+{% endif %}
+
+<script>
+const filters = ['disenosSearch', 'categoryFilterDisenos', 'extFilter'];
+filters.forEach(id => {
+    document.getElementById(id).addEventListener('input', filterDisenos);
+    document.getElementById(id).addEventListener('change', filterDisenos);
+});
+
+function filterDisenos() {
+    const search = document.getElementById('disenosSearch').value.toLowerCase();
+    const category = document.getElementById('categoryFilterDisenos').value;
+    const ext = document.getElementById('extFilter').value;
+    const cards = document.querySelectorAll('.diseno-card');
+    
+    cards.forEach(card => {
+        const name = card.dataset.name;
+        const cat = card.dataset.category;
+        const cardExt = card.dataset.ext;
+        
+        const matchSearch = !search || name.includes(search);
+        const matchCat = !category || cat === category;
+        const matchExt = !ext || cardExt === ext;
+        
+        card.style.display = matchSearch && matchCat && matchExt ? '' : 'none';
+    });
+}
+</script>
+{% endblock %}

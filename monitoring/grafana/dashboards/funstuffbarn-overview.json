@@ -1,0 +1,163 @@
+{
+  "dashboard": {
+    "title": "FunStuffBarn Agent-Etsy Dashboard",
+    "uid": "funstuffbarn-overview",
+    "tags": ["funstuffbarn", "agents", "etsy"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "panels": [
+      {
+        "title": "Cycle Duration",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "funstuffbarn_cycle_duration_seconds",
+            "legendFormat": "Cycle Duration"
+          }
+        ]
+      },
+      {
+        "title": "Agent Duration by Agent",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "funstuffbarn_agent_duration_seconds",
+            "legendFormat": "{{agent}}"
+          }
+        ]
+      },
+      {
+        "title": "Agent Success Rate",
+        "type": "stat",
+        "gridPos": {"x": 0, "y": 8, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(rate(funstuffbarn_agent_complete_total{success=\"true\"}[5m])) / sum(rate(funstuffbarn_agent_complete_total[5m])) * 100",
+            "legendFormat": "Success %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "red", "value": null},
+                {"color": "yellow", "value": 80},
+                {"color": "green", "value": 95}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "title": "Groq Circuit Breaker State",
+        "type": "stat",
+        "gridPos": {"x": 6, "y": 8, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "funstuffbarn_circuit_breaker_state{api=\"groq\"}",
+            "legendFormat": "State"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {"type": "value", "options": {"0": {"text": "CLOSED", "color": "green"}, "1": {"text": "OPEN", "color": "red"}, "2": {"text": "HALF_OPEN", "color": "yellow"}}}
+            ]
+          }
+        }
+      },
+      {
+        "title": "API Latency (p95)",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(funstuffbarn_api_latency_seconds_bucket[5m]))",
+            "legendFormat": "{{api}}"
+          }
+        ]
+      },
+      {
+        "title": "API Error Rate",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 16, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "rate(funstuffbarn_api_errors_total[5m])",
+            "legendFormat": "{{api}} - {{error_type}}"
+          }
+        ]
+      },
+      {
+        "title": "Email Sent",
+        "type": "stat",
+        "gridPos": {"x": 12, "y": 16, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "rate(funstuffbarn_email_sent_total[1h])",
+            "legendFormat": "Emails/hour"
+          }
+        ]
+      },
+      {
+        "title": "Groq Tokens Used",
+        "type": "graph",
+        "gridPos": {"x": 18, "y": 16, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "rate(funstuffbarn_groq_tokens_used_total[5m])",
+            "legendFormat": "{{model}}"
+          }
+        ]
+      },
+      {
+        "title": "Disk Usage",
+        "type": "gauge",
+        "gridPos": {"x": 0, "y": 24, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "(funstuffbarn_disk_usage_bytes{type=\"used\"} / funstuffbarn_disk_usage_bytes{type=\"total\"}) * 100",
+            "legendFormat": "Disk %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 70},
+                {"color": "red", "value": 90}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "title": "Report Files by Type",
+        "type": "table",
+        "gridPos": {"x": 6, "y": 24, "w": 18, "h": 8},
+        "targets": [
+          {
+            "expr": "funstuffbarn_report_files_total",
+            "format": "table",
+            "legendFormat": "{{prefix}}"
+          }
+        ]
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "30s"
+  },
+  "overwrite": true
+}

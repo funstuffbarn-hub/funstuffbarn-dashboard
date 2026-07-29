@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block page_title %}Reportes{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Reportes Generados</h5>
+    <div>
+        <select class="form-select form-select-sm d-inline-block w-auto" id="prefixFilter" onchange="filterReports()">
+            <option value="">Todos los tipos</option>
+            {% for p in prefixes %}
+            <option value="{{ p }}">{{ p }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="reportsTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Fecha</th>
+                        <th>Tamaño</th>
+                        <th>Modificado</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reports %}
+                    <tr data-prefix="{{ r.prefix }}">
+                        <td>
+                            <span class="badge bg-primary-subtle text-primary">{{ r.prefix }}</span>
+                        </td>
+                        <td>{{ r.date }}</td>
+                        <td>{{ r.size_kb }} KB</td>
+                        <td class="text-muted small">{{ r.modified }}</td>
+                        <td class="text-end">
+                            <a href="/reports/{{ r.filename }}" class="btn btn-sm btn-outline-primary me-1">
+                                <i class="bi bi-eye"></i> Ver
+                            </a>
+                            <a href="/reports/{{ r.filename }}?download=1" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-download"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if not reports %}
+        <div class="card-body text-center py-5">
+            <i class="bi bi-inbox display-1 text-muted"></i>
+            <p class="text-muted mt-3">No hay reportes generados aún.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function filterReports() {
+    const prefix = document.getElementById('prefixFilter').value;
+    const rows = document.querySelectorAll('#reportsTable tbody tr');
+    rows.forEach(row => {
+        if (!prefix || row.dataset.prefix === prefix) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

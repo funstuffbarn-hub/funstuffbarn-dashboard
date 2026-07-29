@@ -1,0 +1,164 @@
+INFO:     Started server process [79810]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59126 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59128 - "GET /static/js/dashboard.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:59126 - "GET /static/css/dashboard.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:59126 - "GET /prompts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59139 - "GET /prompts/experimentales/ia_generativa_midjourney/0079_Pinterest_Trend_TEMAS_EN_ALZA_-_Parques_nacionales_y_monumentos_naturales_Los.docx/view HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59141 - "GET /prompts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59141 - "GET /prompts/banderas_estados/california/0093_Estrategia_BANDERA_DE_CALIFORNIA.docx/view HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59156 - "GET /prompts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59156 - "GET /disenos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59156 - "GET /reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59156 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/22.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59156 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/22.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59160 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/25.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59156 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/4.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59167 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/7.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59166 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/5.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59169 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/6.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59171 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/7.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59160 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/6.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59156 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/25.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59173 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/3.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59175 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Fachada%20Tripartita.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59177 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Arco%20Magenta.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59194 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59194 - "GET /secrets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59196 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59726 - "GET /secrets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59726 - "GET /static/css/dashboard.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:59728 - "GET /static/js/dashboard.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:59732 - "GET /prompts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /prompts/banderas_estados/new_york/0045_Estrategia_NEW_YORK_STATE_PRIDE.docx/view HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59738 - "GET /prompts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59742 - "GET /prompts/estacionales/verano/0071_Pinterest_Trend_OPORTUNIDADES_ESPEC%C3%8DFICAS_-_Crear_contenido_visual_para_la_temporada_La_t.docx/view HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59742 - "GET /disenos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59745 - "GET /disenos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/25.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/4.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/25.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/5.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/4.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/6.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/5.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/7.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59766 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/3.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/6.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/7.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Balloons%20Alphabet/3.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Puerta%20Caligraf%C3%ADa.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Fachada%20Tripartita.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Fachada%20Tripartita.png HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Lat%C3%B3n%20Repujado.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Arco%20Semicircular.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Panel%20Zellij.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Arco%20Magenta.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Torre%20Urbana.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Arco%20Imperial.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Portal%20Minimalista.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Madera%20Craquelada.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Arco%20Mosaico.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Portal%20Abierto.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/P%C3%A1tina%20Dorada.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Friso%20Doble.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Arco%20Herradura.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Estuco%20Calado.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Riad%20Terraza.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Triple%20Portal.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Arco%20Coral.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Columnas%20Cl%C3%A1sicas.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Caba%C3%B1a%20Pinos.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Globo%20Monta%C3%B1a.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Houses/Moroccan%20Gates/Puerta%20Zellij.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Luna%20Gigante.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Amarilla%20Solapa.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Arrugado%20Extremo.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Cruz%20Amarilla.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Amarilla%20Arrugada.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Amarilla%20L%C3%A1mina.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Cruz%20Bicolor.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Cruz%20Fluida.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Cruz%20Negra.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Cruz%20Plateada.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Diagonal%20Nudo.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Franjas%20Diagonales.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Met%C3%A1lica%20Arrugada.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Negra%20Arrugada.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Ondulaci%C3%B3n%20Solapa.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Panel%20Amarillo.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Panel%20Met%C3%A1lico.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Plateada%20Arrugada.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Plateado%20Torcido.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Plegado%20Brillante.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Pliegue%20Diagonal.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Rasgu%C3%B1os%20Sutiles.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Relieve%20Marca.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Solapa%20Despegar.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Superficie%20Plana.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/Duct%20Tapes/Torsi%C3%B3n%20Dram%C3%A1tica.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Agujas%20Rocosas.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Arco%20Desierto.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Atardecer%20Flores.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Caba%C3%B1a%20Aurora.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Camping%20Aurora.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Castillo%20Fantas%C3%ADa.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59759 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Circular%20Aurora.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Circular%20Lago.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Circular%20Monta%C3%B1a.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Desierto%20Luna.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Faro%20Circular.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Granero%20Aurora.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Monta%C3%B1a%20Aurora.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Monta%C3%B1a%20Reflejo.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Pinos%20Aurora.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Pueblo%20Invernal.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Reflejo%20Sim%C3%A9trico.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Aurora%20Boreal/Sendero%20Bosque.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/1.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/10.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/11.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/12.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/13.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/14.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/15.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/16.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/17.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/2.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/3.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/4.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/5.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/6.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/7.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/8.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Historical%20Monuments/9.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/1.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/10.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/11.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/12.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/13.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/14.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/15.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/16.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/18.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/17.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/19.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/2.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/20.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/21.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/22.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/23.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/24.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/25.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/26.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/27.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/28.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59763 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/29.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59783 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/30.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59761 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/3.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/31.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59777 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/32.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59754 - "GET /disenos/FunStuffBarn_WebStore_Ideas/Disen%CC%83os_Comprados/SignPosts%20-%20Cities%20Signs/Travel%20Images/4.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59792 - "GET / HTTP/1.1" 200 OK

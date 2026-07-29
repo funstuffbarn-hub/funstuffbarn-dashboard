@@ -1,0 +1,38 @@
+# Fly.io configuration for FunStuffBarn Dashboard
+app = "funstuffbarn-dashboard"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  PYTHONUNBUFFERED = "1"
+  PYTHONDONTWRITEBYTECODE = "1"
+  ENVIRONMENT = "production"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
+
+[health_check]
+  path = "/health"
+  interval = "30s"
+  timeout = "10s"
+  method = "get"
+
+# Worker processes (scale separately)
+[processes]
+  app = "/opt/venv/bin/python main.py"
+  worker-agents = "celery -A services.orchestrator.celery_app worker -Q agents -c 2 --loglevel=info"
+  worker-orchestrator = "celery -A services.orchestrator.celery_app worker -Q orchestrator,maintenance -c 1 --loglevel=info"
+  scheduler = "celery -A services.orchestrator.celery_app beat --loglevel=info"

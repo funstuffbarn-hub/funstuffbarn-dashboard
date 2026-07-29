@@ -1,0 +1,266 @@
+version: '3.8'
+
+services:
+  # Main Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: funstuffbarn-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./reportes:/app/reportes
+      - ./prompt_archive:/app/prompt_archive
+      - ./logs:/app/logs
+      - ./perfil_de_marca.txt:/app/perfil_de_marca.txt:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # Redis for caching, Celery broker, and session storage
+  redis:
+    image: redis:7-alpine
+    container_name: funstuffbarn-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # Celery Worker - Agents
+  worker-agents:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: funstuffbarn-worker-agents
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: celery -A services.orchestrator.celery_app worker -Q agents -c 2 --loglevel=info
+    volumes:
+      - ./reportes:/app/reportes
+      - ./prompt_archive:/app/prompt_archive
+      - ./logs:/app/logs
+      - ./perfil_de_marca.txt:/app/perfil_de_marca.txt:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+    deploy:
+      replicas: 1
+
+  # Celery Worker - Orchestrator
+  worker-orchestrator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: funstuffbarn-worker-orchestrator
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: celery -A services.orchestrator.celery_app worker -Q orchestrator,maintenance -c 1 --loglevel=info
+    volumes:
+      - ./reportes:/app/reportes
+      - ./prompt_archive:/app/prompt_archive
+      - ./logs:/app/logs
+    depends_on:
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    deploy:
+      replicas: 1
+
+  # Celery Beat (Scheduler)
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: funstuffbarn-celery-beat
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: celery -A services.orchestrator.celery_app beat --loglevel=info --scheduler celery.beat.PersistentScheduler
+    volumes:
+      - ./celerybeat-schedule:/app/celerybeat-schedule
+    depends_on:
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+
+  # Celery Flower (Monitoring)
+  flower:
+    image: mher/flower:2.0
+    container_name: funstuffbarn-flower
+    restart: unless-stopped
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - FLOWER_PORT=5555
+      - FLOWER_BASIC_AUTH=user:changeme
+    depends_on:
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+
+  # Prometheus for metrics
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: funstuffbarn-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: funstuffbarn-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # Loki for log aggregation
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: funstuffbarn-loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./monitoring/loki-config.yml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+
+  # Promtail for log shipping
+  promtail:
+    image: grafana/promtail:2.9.0
+    container_name: funstuffbarn-promtail
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs:ro
+      - ./monitoring/promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 128M
+
+  # Backup service (rclone to cloud storage)
+  backup:
+    build:
+      context: .
+      dockerfile: Dockerfile.backup
+    container_name: funstuffbarn-backup
+    env_file:
+      - .env
+    volumes:
+      - ./reportes:/app/reportes:ro
+      - ./prompt_archive:/app/prompt_archive:ro
+      - ./logs:/app/logs:ro
+      - ./perfil_de_marca.txt:/app/perfil_de_marca.txt:ro
+    command: /app/deploy/backup.sh
+    depends_on:
+      - app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+volumes:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  loki_data:
+
+networks:
+  default:
+    name: funstuffbarn-network
+    driver: bridge
