@@ -33,17 +33,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Create non-root user/group before copying files so --chown works
+RUN groupadd -g 1000 nonroot && \
+    useradd -u 1000 -g nonroot -s /usr/sbin/nologin -M nonroot
+
 # Copy virtualenv from builder
 COPY --from=builder /opt/venv /opt/venv
 
-# Copy application code
+# Copy application code as nonroot owner
 COPY --chown=nonroot:nonroot . .
 
-# Create necessary directories
+# Create necessary directories (owned by nonroot)
 RUN mkdir -p /app/logs /app/reportes /app/prompt_archive && \
     chown -R nonroot:nonroot /app
 
-# Create non-root user (already exists in python:3.11-slim)
+# Switch to non-root
 USER nonroot
 
 # Environment variables
