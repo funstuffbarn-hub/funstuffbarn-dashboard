@@ -136,8 +136,9 @@ jobs:
       - name: Run Bandit
         run: |
           pip install --upgrade pip
-          pip install "bandit>=1.7.5" -q
-          bandit -r services/ -f sarif -o bandit-results.sarif || true
+          pip install --upgrade --no-cache-dir "bandit>=1.7.5"
+          python -m bandit --version
+          python -m bandit -r services/ -f sarif -o bandit-results.sarif || true
       
       - name: Upload Bandit results
         uses: github/codeql-action/upload-sarif@v4
