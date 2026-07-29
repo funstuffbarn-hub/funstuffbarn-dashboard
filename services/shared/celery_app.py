@@ -3,6 +3,7 @@ Celery configuration for distributed task processing.
 """
 import os
 import uuid
+from typing import Any, Optional
 
 from celery import Celery
 from celery.schedules import crontab
