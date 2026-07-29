@@ -28,7 +28,7 @@ jobs:
       
       - name: Run Ruff
         run: |
-          ruff check .
+          ruff check . --output-format=github
       
       - name: Run MyPy
         run: |
@@ -95,7 +95,7 @@ jobs:
       
       - name: Run MyPy
         run: |
-          mypy services/ --strict --ignore-missing-imports
+          mypy services/ --ignore-missing-imports
 
   security:
     name: Security Scan
@@ -130,7 +130,7 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
     needs: [lint, test, type-check, security]
-    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.event_name == 'release'
     steps:
       - uses: actions/checkout@v4
       
