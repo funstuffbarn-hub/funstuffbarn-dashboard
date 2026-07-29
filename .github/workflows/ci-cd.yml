@@ -24,22 +24,18 @@ jobs:
       
       - name: Install dependencies
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           pip install -e ".[dev]" --quiet
       
       - name: Run Ruff
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           ruff check .
       
       - name: Run MyPy
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           mypy services/
       
       - name: Run Black (check)
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           black --check .
 
   test:
@@ -66,23 +62,20 @@ jobs:
       
       - name: Install dependencies
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           pip install -e ".[dev]" --quiet
       
       - name: Run unit tests
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           pytest tests/unit/ -v --cov=services --cov-fail-under=80 --cov-report=xml
       
       - name: Run integration tests
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           pytest tests/integration/ -v
       
       - name: Upload coverage
         uses: codecov/codecov-action@v4
         with:
-          files: ./Tienda FunStuffBarn/dashboard/coverage.xml
+          files: ./coverage.xml
           fail_ci_if_error: true
 
   type-check:
@@ -98,12 +91,10 @@ jobs:
       
       - name: Install dependencies
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           pip install -e ".[dev]" --quiet
       
       - name: Run MyPy
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           mypy services/ --strict --ignore-missing-imports
 
   security:
@@ -116,7 +107,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
-          scan-ref: 'Tienda FunStuffBarn/dashboard'
+          scan-ref: '.'
           format: 'sarif'
           output: 'trivy-results.sarif'
       
@@ -127,7 +118,6 @@ jobs:
       
       - name: Run Bandit
         run: |
-          cd "Tienda FunStuffBarn/dashboard"
           pip install bandit -q
           bandit -r services/ -f json -o bandit-results.json || true
       
@@ -168,7 +158,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: Tienda FunStuffBarn/dashboard
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
