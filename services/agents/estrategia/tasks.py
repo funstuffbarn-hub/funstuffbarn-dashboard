@@ -2,10 +2,10 @@
 Estrategia Agent Tasks.
 """
 import logging
-from celery import shared_task
 from datetime import datetime
 from uuid import uuid4
-from typing import Dict, Any
+
+from celery import shared_task
 
 logger = logging.getLogger(__name__)
 
@@ -15,24 +15,22 @@ def run_estrategia(self, task_data: dict = None) -> dict:
     """
     Generate strategy report based on all agent outputs.
     """
-    from uuid import uuid4
-    from datetime import datetime
-    
+
     correlation_id = uuid4()
     logger.info(f"Starting Estrategia agent [{correlation_id}]")
-    
+
     started_at = datetime.utcnow()
-    
+
     try:
         logger.info("Reading agent reports...")
         mercado = read_latest_report("mercado")
         creativo = read_latest_report("creativo")
         pinterest = read_latest_report("pinterest")
         tienda = read_latest_report("tienda")
-        
+
         logger.info("Generating strategy with Groq...")
         estrategia = generate_strategy(mercado, creativo, pinterest, tienda)
-        
+
         report = {
             "date": datetime.utcnow().isoformat(),
             "mercado_summary": mercado.get("analysis", "")[:500] if mercado else "",
@@ -41,7 +39,7 @@ def run_estrategia(self, task_data: dict = None) -> dict:
             "tienda_summary": tienda.get("plan", "")[:500] if tienda else "",
             "estrategia": estrategia,
         }
-        
+
         return {
             "task_id": str(uuid4()),
             "agent_type": "estrategia",
@@ -50,7 +48,7 @@ def run_estrategia(self, task_data: dict = None) -> dict:
             "started_at": started_at.isoformat(),
             "completed_at": datetime.utcnow().isoformat(),
         }
-        
+
     except Exception as e:
         logger.exception(f"Estrategia agent failed: {e}")
         return {
@@ -63,19 +61,18 @@ def run_estrategia(self, task_data: dict = None) -> dict:
 
 def read_latest_report(prefix: str) -> dict:
     """Read the latest report file for a given prefix."""
-    import json
     from pathlib import Path
-    
+
     reportes_dir = Path("/Users/javiermaldonadocorreaair/agente-etsy/reportes")
     if not reportes_dir.exists():
         return {}
-    
+
     files = sorted(reportes_dir.glob(f"{prefix}_*.txt"), reverse=True)
     if not files:
         return {}
-    
+
     try:
-        with open(files[0], "r", encoding="utf-8") as f:
+        with open(files[0], encoding="utf-8") as f:
             content = f.read()
         return {"analysis": content, "file": files[0].name}
     except Exception as e:
@@ -85,16 +82,17 @@ def read_latest_report(prefix: str) -> dict:
 
 def generate_strategy(mercado: dict, creativo: dict, pinterest: dict, tienda: dict) -> str:
     """Generate strategy report with Groq."""
-    from groq import Groq
     import os
-    
+
+    from groq import Groq
+
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-    
+
     mercado_text = mercado.get("analysis", "")[:2000] if mercado else "No disponible"
     creativo_text = creativo.get("analysis", "")[:2000] if creativo else "No disponible"
     pinterest_text = pinterest.get("analysis", "")[:2000] if pinterest else "No disponible"
     tienda_text = tienda.get("plan", "")[:2000] if tienda else "No disponible"
-    
+
     prompt = f"""Eres el estratega senior de FunStuffBarn, tienda Etsy en fase de lanzamiento.
 Vende poleras y hoodies con diseños de parques nacionales de USA,
 y trucker hats con banderas y escudos de los 50 estados de USA.

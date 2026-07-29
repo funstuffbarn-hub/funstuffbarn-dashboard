@@ -7,24 +7,19 @@ import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-from uuid import UUID, uuid4
+from typing import Any
+from uuid import uuid4
 
 from celery import Task
-from celery.exceptions import MaxRetriesExceededError
 
 from services.shared.config import settings
 from services.shared.exceptions import (
-    AgentError,
     CircuitBreakerOpenError,
-    ExternalAPIError,
-    RetryExhaustedError,
 )
 from services.shared.resilience import (
     CircuitBreaker,
     CircuitBreakerConfig,
     RetryPolicy,
-    circuit_breaker_registry,
     retry_with_policy,
 )
 
@@ -35,33 +30,33 @@ logger = logging.getLogger(__name__)
 class AgentResult:
     """Result from agent execution."""
     success: bool
-    data: Optional[Dict] = None
-    error: Optional[str] = None
+    data: dict | None = None
+    error: str | None = None
     duration_seconds: float = 0.0
-    metadata: Dict = None
+    metadata: dict = None
 
 
 class BaseAgent(ABC):
     """Base class for all agents."""
-    
-    def __init__(self, agent_name: str, settings: Optional[Any] = None):
+
+    def __init__(self, agent_name: str, settings: Any | None = None):
         self.agent_name = agent_name
         self.settings = settings
-        self._circuit_breakers: Dict[str, CircuitBreaker] = {}
+        self._circuit_breakers: dict[str, CircuitBreaker] = {}
         self._retry_policy = RetryPolicy(
             max_attempts=3,
             base_delay=1.0,
             max_delay=60.0,
         )
-        
+
     @property
     @abstractmethod
     def agent_name(self) -> str:
         """Agent identifier."""
         pass
-    
+
     @abstractmethod
-    async def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute(self, payload: dict[str, Any]) -> dict[str, Any]:
         """
         Execute agent logic.
         
@@ -72,8 +67,8 @@ class BaseAgent(ABC):
             Result dictionary
         """
         pass
-    
-    def get_circuit_breaker(self, service: str, config: Optional[CircuitBreakerConfig] = None):
+
+    def get_circuit_breaker(self, service: str, config: CircuitBreakerConfig | None = None):
         """Get or create circuit breaker for external service."""
         if service not in self._circuit_breakers:
             self._circuit_breakers[service] = CircuitBreaker(
@@ -84,12 +79,12 @@ class BaseAgent(ABC):
                 )
             )
         return self._circuit_breakers[service]
-    
+
     async def execute_with_resilience(
-        self, 
-        operation: callable, 
+        self,
+        operation: callable,
         service: str,
-        *args, 
+        *args,
         **kwargs
     ) -> Any:
         """
@@ -105,10 +100,10 @@ class BaseAgent(ABC):
             Operation result
         """
         cb = self.get_circuit_breaker(service)
-        
+
         async def _operation():
             return await operation()
-        
+
         try:
             # Execute through circuit breaker
             result = await cb.call(_operation)
@@ -120,12 +115,12 @@ class BaseAgent(ABC):
                 logger.warning(f"Circuit breaker open for {service}, using fallback")
                 return await fallback()
             raise
-    
+
     async def execute_with_retry(
         self,
         operation: callable,
         service: str = "internal",
-        policy: Optional[RetryPolicy] = None,
+        policy: RetryPolicy | None = None,
     ) -> Any:
         """
         Execute operation with retry logic.
@@ -146,20 +141,20 @@ class BaseAgent(ABC):
                 f"Retrying... (attempt {attempt})"
             ),
         )
-    
+
     def _build_celery_task(self) -> Task:
         """Create Celery task for this agent."""
         return CeleryTask(self.agent_name)
-    
-    def run_sync(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+
+    def run_sync(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Run agent synchronously (for testing/synchronous contexts)."""
         return asyncio.run(self.execute(payload))
-    
-    async def run_async(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+
+    async def run_async(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Run agent asynchronously with full resilience."""
         start_time = time.time()
         correlation_id = uuid4()
-        
+
         logger.info(
             f"Starting {self.agent_name}",
             extra={
@@ -168,11 +163,11 @@ class BaseAgent(ABC):
                 "payload_keys": list(payload.keys()) if payload else [],
             }
         )
-        
+
         try:
             result = await self.execute(payload)
             duration = time.time() - start_time
-            
+
             logger.info(
                 f"{self.agent_name} completed successfully",
                 extra={
@@ -181,18 +176,18 @@ class BaseAgent(ABC):
                     "duration_seconds": duration,
                 }
             )
-            
+
             return {
                 "success": True,
                 "data": result,
                 "duration_seconds": duration,
                 "correlation_id": str(correlation_id),
             }
-            
+
         except Exception as e:
             duration = time.time() - start_time
             error_msg = str(e)
-            
+
             logger.error(
                 f"{self.agent_name} failed: {error_msg}",
                 exc_info=True,
@@ -202,7 +197,7 @@ class BaseAgent(ABC):
                     "duration_seconds": duration,
                 }
             )
-            
+
             return {
                 "success": False,
                 "error": error_msg,
@@ -217,14 +212,14 @@ class BaseAgent(ABC):
 
 class BaseAgentTask(Task):
     """Base Celery task for agents with error handling."""
-    
+
     abstract = True
     autoretry_for = (Exception,)
     retry_backoff = True
     retry_backoff_max = 600
     retry_jitter = True
     max_retries = 3
-    
+
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         """Handle task failure."""
         logger.error(
@@ -233,7 +228,7 @@ class BaseAgentTask(Task):
             extra={"task_id": task_id, "args": args, "kwargs": kwargs},
         )
         super().on_failure(exc, task_id, args, kwargs, einfo)
-    
+
     def on_retry(self, exc, task_id, args, kwargs, einfo):
         """Handle task retry."""
         logger.warning(
@@ -241,7 +236,7 @@ class BaseAgentTask(Task):
             extra={"task_id": task_id, "attempt": self.request.retries},
         )
         super().on_retry(exc, task_id, args, kwargs, einfo)
-    
+
     def on_success(self, retval, task_id, args, kwargs):
         """Handle task success."""
         logger.info(
@@ -253,20 +248,20 @@ class BaseAgentTask(Task):
 
 class AgentTask(BaseAgentTask):
     """Celery task for an agent."""
-    
+
     def __init__(self, agent_class):
         self.agent_class = agent_class
         super().__init__()
-    
-    def run(self, payload: Dict[str, Any], **kwargs) -> Dict[str, Any]:
+
+    def run(self, payload: dict[str, Any], **kwargs) -> dict[str, Any]:
         """Execute agent task."""
         # Create agent instance
         agent = self.agent_class()
-        
+
         # Run synchronously (Celery runs in worker process)
         import asyncio
         result = asyncio.run(agent.run_async(payload))
-        
+
         return result
 
 
@@ -292,42 +287,42 @@ def agent_task(agent_class):
 
 class AgentRegistry:
     """Registry for managing agents."""
-    
+
     def __init__(self):
-        self._agents: Dict[str, Any] = {}
-        self._tasks: Dict[str, Task] = {}
-    
+        self._agents: dict[str, Any] = {}
+        self._tasks: dict[str, Task] = {}
+
     def register(self, agent_class):
         """Register an agent class."""
         agent = agent_class()
         self._agents[agent.agent_name] = agent
-        
+
         # Create Celery task
         task = create_agent_task(agent_class)
         self._tasks[agent.agent_name] = task
-        
+
         logger.info(f"Registered agent: {agent.agent_name}")
-    
+
     def get_agent(self, name: str):
         """Get agent by name."""
         return self._agents.get(name)
-    
+
     def get_task(self, name: str):
         """Get Celery task by name."""
         return self._tasks.get(name)
-    
-    def list_agents(self) -> List[str]:
+
+    def list_agents(self) -> list[str]:
         """List registered agent names."""
         return list(self._agents.keys())
-    
-    async def run_agent(self, name: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+
+    async def run_agent(self, name: str, payload: dict[str, Any]) -> dict[str, Any]:
         """Run agent by name."""
         agent = self._agents.get(name)
         if not agent:
             raise ValueError(f"Agent not found: {name}")
         return await agent.run_async(payload)
-    
-    def run_agent_sync(self, name: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+
+    def run_agent_sync(self, name: str, payload: dict[str, Any]) -> dict[str, Any]:
         """Run agent synchronously."""
         agent = self._agents.get(name)
         if not agent:
@@ -346,9 +341,9 @@ agent_registry = AgentRegistry()
 def create_celery_app() -> Celery:
     """Create and configure Celery application."""
     from celery import Celery
-    
+
     app = Celery("funstuffbarn_agents")
-    
+
     # Load config from settings
     app.conf.update(
         broker_url=settings.celery_broker_url,
@@ -400,7 +395,7 @@ def create_celery_app() -> Celery:
             },
         },
     )
-    
+
     return app
 
 
@@ -412,40 +407,40 @@ celery_app = create_celery_app()
 # Storage Utilities
 # ============================================================
 
-def save_report(report_type: str, report: Dict[str, Any]) -> str:
+def save_report(report_type: str, report: dict[str, Any]) -> str:
     """Save report to filesystem."""
-    from pathlib import Path
     import json
-    
+    from pathlib import Path
+
     date_str = datetime.utcnow().strftime("%Y-%m-%d")
     filename = f"{report_type}_{date_str}.json"
-    
+
     report_dir = Path(__file__).parent.parent.parent / "data" / "reports" / report_type
     report_dir.mkdir(parents=True, exist_ok=True)
-    
+
     filepath = report_dir / filename
-    
+
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
-    
+
     logger.info(f"Report saved: {filepath}")
     return str(filepath)
 
 
-def load_latest_report(report_type: str) -> Optional[Dict]:
+def load_latest_report(report_type: str) -> dict | None:
     """Load latest report of given type."""
-    from pathlib import Path
     import json
-    
+    from pathlib import Path
+
     report_dir = Path(__file__).parent.parent.parent / "data" / "reports" / report_type
     if not report_dir.exists():
         return None
-    
+
     files = sorted(report_dir.glob("*.json"), reverse=True)
     if not files:
         return None
-    
-    with open(files[0], "r", encoding="utf-8") as f:
+
+    with open(files[0], encoding="utf-8") as f:
         return json.load(f)
 
 

@@ -70,10 +70,6 @@ class Settings(BaseSettings):
     def celery_broker_url(self) -> str:
         return self.CELERY_BROKER_URL
 
-    @property
-    def celery_result_backend(self) -> str:
-        return self.CELERY_RESULT_BACKEND
-
     # Groq API
     GROQ_API_KEY: SecretStr = Field(..., description="Groq API Key for LLM")
     GROQ_MODEL: str = "llama-3.1-8b-instant"

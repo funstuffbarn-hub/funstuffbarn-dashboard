@@ -2,10 +2,10 @@
 Tienda Agent Tasks.
 """
 import logging
-from celery import shared_task
 from datetime import datetime
 from uuid import uuid4
-from typing import Dict, Any, List
+
+from celery import shared_task
 
 logger = logging.getLogger(__name__)
 
@@ -15,31 +15,29 @@ def run_tienda(self, task_data: dict = None) -> dict:
     """
     Run store management analysis.
     """
-    from uuid import uuid4
-    from datetime import datetime
-    
+
     correlation_id = uuid4()
     logger.info(f"Starting Tienda agent [{correlation_id}]")
-    
+
     started_at = datetime.utcnow()
-    
+
     try:
         logger.info("Reading Printful products...")
         printful = fetch_printful_products()
-        
+
         logger.info("Reading Etsy listings...")
         etsy_listings = fetch_etsy_listings()
-        
+
         logger.info("Generating store plan with Groq...")
         plan = generate_store_plan(printful, etsy_listings)
-        
+
         report = {
             "date": datetime.utcnow().isoformat(),
             "printful_products": printful,
             "etsy_listings": etsy_listings,
             "plan": plan,
         }
-        
+
         return {
             "task_id": str(uuid4()),
             "agent_type": "tienda",
@@ -48,7 +46,7 @@ def run_tienda(self, task_data: dict = None) -> dict:
             "started_at": started_at.isoformat(),
             "completed_at": datetime.utcnow().isoformat(),
         }
-        
+
     except Exception as e:
         logger.exception(f"Tienda agent failed: {e}")
         return {
@@ -61,15 +59,16 @@ def run_tienda(self, task_data: dict = None) -> dict:
 
 def fetch_printful_products() -> str:
     """Fetch products from Printful."""
-    import requests
     import os
-    
+
+    import requests
+
     token = os.getenv("PRINTFUL_TOKEN")
     store_id = os.getenv("PRINTFUL_STORE_ID")
-    
+
     if not token or not store_id:
         return "Printful credentials not configured"
-    
+
     try:
         headers = {"Authorization": f"Bearer {token}", "X-PF-Store-Id": store_id}
         response = requests.get(
@@ -77,13 +76,13 @@ def fetch_printful_products() -> str:
             headers=headers,
             timeout=15,
         )
-        
+
         if response.status_code == 200:
             products = response.json().get("result", [])
             if not products:
                 return "No products in Printful yet."
             return "\n".join([f"  - {p['name']}" for p in products[:20]])
-        
+
         return f"Printful API error: {response.status_code}"
     except Exception as e:
         return f"Printful error: {e}"
@@ -93,11 +92,11 @@ def fetch_etsy_listings() -> str:
     """Fetch listings from Etsy via OAuth."""
     try:
         from etsy_client import obtener_headers_autenticados, obtener_mis_listings
-        
+
         headers = obtener_headers_autenticados()
         activos = obtener_mis_listings(headers, estado="active")
         borradores = obtener_mis_listings(headers, estado="draft")
-        
+
         return f"LISTINGS ACTIVOS:\n{activos}\n\nLISTINGS EN BORRADOR:\n{borradores}"
     except Exception as e:
         logger.error(f"Error Etsy: {e}")
@@ -106,11 +105,12 @@ def fetch_etsy_listings() -> str:
 
 def generate_store_plan(printful: str, etsy_listings: str) -> str:
     """Generate store plan with Groq."""
-    from groq import Groq
     import os
-    
+
+    from groq import Groq
+
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-    
+
     prompt = f"""Eres el gestor de FunStuffBarn, tienda Etsy en fase de lanzamiento.
 Vende poleras y hoodies con diseños de parques nacionales de USA,
 y trucker hats con banderas y escudos de los 50 estados de USA.

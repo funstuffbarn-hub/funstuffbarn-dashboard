@@ -1,16 +1,15 @@
 """
 Creative Agent - Generates design ideas based on market analysis and Pinterest trends.
 """
-import os
 import logging
 from datetime import datetime
-from typing import Dict, Any, List, Optional
+from typing import Any
 
 from groq import Groq
 
 from services.agents.base import BaseAgent
 from services.shared.config import get_settings
-from services.shared.resilience import retry_with_policy, circuit_breaker_registry
+from services.shared.resilience import circuit_breaker_registry, retry_with_policy
 
 logger = logging.getLogger(__name__)
 
@@ -21,14 +20,14 @@ groq_breaker = circuit_breaker_registry.get_or_create("groq")
 
 class CreativoAgent(BaseAgent):
     """Creative Agent - Generates design ideas based on market analysis and Pinterest trends."""
-    
+
     agent_name = "creativo"
-    
+
     def __init__(self, settings_override=None):
         super().__init__("creativo", get_settings())
         self.groq_client = Groq(api_key=self.settings.GROQ_API_KEY)
-    
-    async def execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+
+    async def execute(self, payload: dict[str, Any]) -> dict[str, Any]:
         """
         Generate creative design ideas based on market analysis and Pinterest trends.
         
@@ -40,30 +39,30 @@ class CreativoAgent(BaseAgent):
         """
         market_analysis = payload.get("market_analysis", {}) if payload else {}
         pinterest_trends = payload.get("pinterest_trends", {}) if payload else {}
-        
+
         logger.info("Generating creative design ideas...")
-        
+
         # Generate ideas with Groq
         ideas = await self._generate_ideas_with_groq(market_analysis, pinterest_trends)
-        
+
         # Generate expansions
         expansions = await self._generate_expansions_with_groq()
-        
+
         report = {
             "date": datetime.utcnow().isoformat(),
             "ideas": ideas,
             "expansions": expansions,
         }
-        
+
         return report
-    
-    async def _generate_ideas_with_groq(self, market: Dict, pinterest: Dict) -> str:
+
+    async def _generate_ideas_with_groq(self, market: dict, pinterest: dict) -> str:
         """Generate creative ideas with Groq."""
-        
+
         @retry_with_policy(policy=GROQ_POLICY)
         async def _call_groq():
             groq_client = Groq(api_key=self.settings.GROQ_API_KEY)
-            
+
             prompt = f"""Eres el director creativo de una tienda de ropa con diseños gráficos en Etsy.
 Vende poleras y hoodies con diseños de parques nacionales de USA,
 y trucker hats con banderas y escudos de los 50 estados de USA.
@@ -107,14 +106,14 @@ No sugieras nada que contradiga los temas prohibidos.
 Responde en español (excepto el prompt de AI que va en inglés)."""
 
         return await self._call_groq(prompt, max_tokens=2500, temperature=0.8)
-    
+
     async def _generate_expansions_with_groq(self) -> str:
         """Generate expansion recommendations."""
-        
+
         @retry_with_policy(policy=GROQ_POLICY)
         async def _call_groq():
             groq_client = Groq(api_key=self.settings.GROQ_API_KEY)
-            
+
             prompt = f"""Eres un estratega de producto para tiendas Etsy de ropa gráfica.
 
 PERFIL Y DISEÑOS EXISTENTES:
@@ -141,7 +140,7 @@ De todas las expansiones sugeridas, ¿cuál tiene más potencial comercial inmed
 Sé concreto. Menciona diseños por nombre cuando sea posible."""
 
         return await self._call_groq(prompt, max_tokens=1200, temperature=0.7)
-    
+
     async def _call_groq(self, prompt: str, max_tokens: int = 2000, temperature: float = 0.7) -> str:
         @retry_with_policy(policy=GROQ_POLICY)
         async def _call():
@@ -154,11 +153,11 @@ Sé concreto. Menciona diseños por nombre cuando sea posible."""
             )
             return response.choices[0].message.content
         return await groq_breaker.call(_call_groq)
-    
-    async def _generate_ideas_with_groq(self, market: Dict, pinterest: Dict) -> str:
+
+    async def _generate_ideas_with_groq(self, market: dict, pinterest: dict) -> str:
         """Generate creative ideas with Groq."""
         return await self._generate_ideas_with_groq(market, pinterest)
-    
+
     async def _generate_expansions_with_groq(self) -> str:
         """Generate expansion recommendations."""
         return await self._generate_expansions_with_groq()
@@ -166,10 +165,10 @@ Sé concreto. Menciona diseños por nombre cuando sea posible."""
 
 if __name__ == "__main__":
     import asyncio
-    
+
     async def test():
         agent = CreativoAgent()
         result = await agent.execute({})
         print(result)
-    
+
     asyncio.run(test())

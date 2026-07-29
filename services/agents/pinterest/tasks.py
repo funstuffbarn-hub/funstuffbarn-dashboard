@@ -2,12 +2,12 @@
 Pinterest Trends Agent.
 """
 import os
-import requests
-import re
 from datetime import datetime
+
+import requests
 from bs4 import BeautifulSoup
-from groq import Groq
 from dotenv import load_dotenv
+from groq import Groq
 
 load_dotenv()
 
@@ -33,7 +33,7 @@ HEADERS = {
 
 def ejecutar() -> str:
     perfil = cargar_perfil()
-    
+
     # Ajusta estos keywords a tu nicho
     keywords_pinterest = [
         "graphic tee aesthetic",
@@ -62,7 +62,7 @@ def ejecutar() -> str:
 
 def cargar_perfil() -> str:
     try:
-        with open("perfil_de_marca.txt", "r", encoding="utf-8") as f:
+        with open("perfil_de_marca.txt", encoding="utf-8") as f:
             return f.read()
     except:
         return "Perfil no encontrado. Completa perfil_de_marca.txt"
@@ -149,7 +149,7 @@ Sé específico y visual en tus descripciones. Responde en español."""
 
 if __name__ == "__main__":
     print(f"\n{'='*55}")
-    print(f"  AGENTE PINTEREST — TENDENCIAS VISUALES")
+    print("  AGENTE PINTEREST — TENDENCIAS VISUALES")
     print(f"{'='*55}\n")
     resultado = ejecutar()
     print(resultado)

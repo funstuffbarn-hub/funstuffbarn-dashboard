@@ -2,6 +2,7 @@
 Celery app configuration for FunStuffBarn orchestrator.
 """
 import os
+
 from celery import Celery
 from celery.schedules import crontab
 
@@ -17,16 +18,16 @@ app.conf.update(
     # Broker
     broker_url=os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0"),
     result_backend=os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/1"),
-    
+
     # Serialization
     task_serializer="json",
     result_serializer="json",
     accept_content=["json"],
-    
+
     # Timezone
     timezone="UTC",
     enable_utc=True,
-    
+
     # Task routing
     task_routes={
         "services.agents.mercado.*": {"queue": "mercado"},
@@ -37,25 +38,25 @@ app.conf.update(
         "services.orchestrator.backup.*": {"queue": "maintenance"},
         "services.orchestrator.retention.*": {"queue": "maintenance"},
     },
-    
+
     # Worker settings
     worker_prefetch_multiplier=1,
     worker_max_tasks_per_child=100,
     worker_disable_rate_limits=False,
-    
+
     # Task execution
     task_acks_late=True,
     task_reject_on_worker_lost=True,
     task_track_started=True,
-    
+
     # Result backend
     result_expires=3600,
     result_extended=True,
-    
+
     # Monitoring
     worker_send_task_events=True,
     task_send_sent_event=True,
-    
+
     # Beat schedule (periodic tasks)
     beat_schedule={
         # Daily backup at 02:00
@@ -64,35 +65,35 @@ app.conf.update(
             "schedule": crontab(hour=2, minute=0),
             "options": {"queue": "maintenance"},
         },
-        
+
         # Daily retention cleanup at 03:00
         "daily-retention-cleanup": {
             "task": "services.orchestrator.retention.apply_retention_policy",
             "schedule": crontab(hour=3, minute=0),
             "options": {"queue": "maintenance"},
         },
-        
+
         # Daily cycle at 08:00
         "daily-cycle": {
             "task": "services.orchestrator.cycle.run_daily_cycle",
             "schedule": crontab(hour=8, minute=0),
             "options": {"queue": "orchestrator"},
         },
-        
+
         # Weekly cleanup (Sunday 04:00)
         "weekly-cleanup": {
             "task": "services.orchestrator.backup.cleanup_old_backups",
             "schedule": crontab(day_of_week=0, hour=4, minute=0),
             "options": {"queue": "maintenance"},
         },
-        
+
         # Health check every 5 minutes
         "health-check": {
             "task": "services.orchestrator.monitoring.health_check",
             "schedule": 300.0,  # Every 5 minutes
             "options": {"queue": "monitoring"},
         },
-        
+
         # Metrics collection every minute
         "collect-metrics": {
             "task": "services.orchestrator.monitoring.collect_metrics",
@@ -100,17 +101,17 @@ app.conf.update(
             "options": {"queue": "monitoring"},
         },
     },
-    
+
     # Task default queue
     task_default_queue="default",
     task_default_exchange="default",
     task_default_routing_key="default",
-    
+
     # Security
     worker_hijack_root_logger=False,
     worker_log_format="[%(asctime)s: %(levelname)s/%(processName)s] %(message)s",
     worker_task_log_format="[%(asctime)s: %(levelname)s/%(processName)s][%(task_name)s(%(task_id)s)] %(message)s",
-    
+
     # Import tasks
     imports=(
         "services.agents.mercado.tasks",

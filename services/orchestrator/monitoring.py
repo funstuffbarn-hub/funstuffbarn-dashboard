@@ -1,25 +1,24 @@
 """
 Monitoring tasks for health checks and metrics collection.
 """
-import psutil
 import os
-import logging
 from datetime import datetime
-from typing import Dict, Any
+from typing import Any
 
+import psutil
 from celery import shared_task
 from celery.schedules import crontab
 
 from services.shared.config import get_settings
-from services.shared.resilience import circuit_breaker_registry
 from services.shared.logging import get_logger
+from services.shared.resilience import circuit_breaker_registry
 
 logger = get_logger(__name__)
 settings = get_settings()
 
 
 @shared_task(bind=True, name="services.orchestrator.monitoring.health_check")
-def health_check(self) -> Dict[str, Any]:
+def health_check(self) -> dict[str, Any]:
     """
     Comprehensive health check for all system components.
     """
@@ -118,6 +117,7 @@ def collect_metrics(self) -> dict:
     Collect system metrics for Prometheus/Grafana.
     """
     import os
+
     import psutil
 
     metrics = {
@@ -169,7 +169,7 @@ def collect_metrics(self) -> dict:
         inspect = current_app.control.inspect()
         stats = inspect.stats() or {}
         active = inspect.active() or {}
-        
+
         total_tasks = sum(len(v) for v in active.values())
         metrics["celery"] = {
             "workers": len(stats),
@@ -184,7 +184,6 @@ def collect_metrics(self) -> dict:
 
 
 # Schedule for periodic metrics collection
-from celery.schedules import crontab
 
 
 def get_periodic_schedule():
