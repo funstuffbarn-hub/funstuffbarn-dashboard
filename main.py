@@ -2,12 +2,9 @@
 Main entry point for FunStuffBarn Agent-Etsy System.
 Supports both monolithic and microservices modes.
 """
-import os
-import sys
 import signal
-import logging
+import sys
 from contextlib import asynccontextmanager
-from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI, Request, Response
@@ -15,20 +12,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from services.shared.config import get_settings
-from services.shared.logging import setup_logging, get_logger
-from services.shared.celery_app import celery_app
-from services.shared.resilience import circuit_breaker_registry
+from services.orchestrator.monitoring import (
+    health_check,
+)
 
 # Import all routes
 from services.orchestrator.tasks import (
     run_daily_cycle,
-    send_daily_report,
 )
-from services.orchestrator.monitoring import (
-    health_check,
-    collect_metrics,
-)
+from services.shared.celery_app import celery_app
+from services.shared.config import get_settings
+from services.shared.logging import get_logger, setup_logging
 
 settings = get_settings()
 
@@ -46,12 +40,12 @@ logger = get_logger(__name__)
 async def lifespan(app: FastAPI):
     """Application lifespan handler."""
     logger.info("Starting FunStuffBarn Agent-Etsy System")
-    
+
     # Initialize resources
     # TODO: Initialize Redis, DB connections, etc.
-    
+
     yield
-    
+
     # Cleanup
     logger.info("Shutting down FunStuffBarn Agent-Etsy System")
     # TODO: Close connections
@@ -88,7 +82,7 @@ async def health_check():
 @app.get("/metrics")
 async def metrics():
     """Prometheus metrics endpoint."""
-    from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+    from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
     from prometheus_client.core import REGISTRY
     return Response(content=generate_latest(REGISTRY), media_type=CONTENT_TYPE_LATEST)
 
@@ -98,9 +92,9 @@ async def metrics():
 async def run_agent(agent_type: str, payload: dict = None, priority: int = 5):
     """Run a specific agent asynchronously."""
     from services.orchestrator.tasks import run_single_agent
-    
+
     task = run_single_agent.delay(agent_type=agent_type, payload=payload, priority=priority)
-    
+
     return {
         "task_id": task.id,
         "agent_type": agent_type,
@@ -111,10 +105,9 @@ async def run_agent(agent_type: str, payload: dict = None, priority: int = 5):
 @app.post("/api/v1/cycle/run")
 async def run_cycle(payload: dict = None):
     """Trigger daily cycle manually."""
-    from services.orchestrator.tasks import run_daily_cycle
-    
+
     task = run_daily_cycle.delay(payload=payload)
-    
+
     return {
         "task_id": task.id,
         "status": "submitted",
@@ -125,7 +118,7 @@ async def run_cycle(payload: dict = None):
 async def get_task_status(task_id: str):
     """Get task status."""
     result = celery_app.AsyncResult(task_id)
-    
+
     return {
         "task_id": task_id,
         "status": result.state,
@@ -151,18 +144,17 @@ async def list_agents():
 async def get_report(report_type: str, date: str = None):
     """Get latest report of a type."""
     from pathlib import Path
-    import json
-    
+
     date = date or datetime.utcnow().strftime("%Y-%m-%d")
     report_path = f"/Users/javiermaldonadocorreaair/agente-etsy/reportes/{report_type}_{date}.txt"
-    
+
     path = Path(report_path)
     if not path.exists():
         return JSONResponse(
             status_code=404,
             content={"error": f"Report not found: {report_type} for {date}"}
         )
-    
+
     content = path.read_text(encoding="utf-8")
     return {"report_type": report_type, "date": date, "content": content}
 
@@ -187,10 +179,10 @@ def main():
     def signal_handler(sig, frame):
         logger.info("Shutdown signal received")
         sys.exit(0)
-    
+
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
-    
+
     # Run server
     uvicorn.run(
         "main:app",

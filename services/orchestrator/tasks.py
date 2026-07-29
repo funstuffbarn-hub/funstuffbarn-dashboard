@@ -57,7 +57,7 @@ class OrchestratorAgent:
                 "market_analysis": mercado_result.get("result", {}),
                 "pinterest_trends": pinterest_result.get("result", {}),
             }
-            estrategia_task = run_estrategia.delay(estrategia_payload)
+            run_estrategia.delay(estrategia_payload)
 
             # Wait for both
             tienda_result = tienda_task.get(timeout=300)
@@ -165,32 +165,32 @@ def build_report_html(payload: dict) -> str:
         <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
             <h1 style="color: #2c3e50;">🏪 FunStuffBarn — Reporte Diario</h1>
             <p style="color: #666;">{payload.get('date', 'hoy')}</p>
-            
+
             <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h2 style="color: #2c3e50;">📊 Mercado</h2>
                 <pre style="background: #fff; padding: 15px; border-radius: 4px;">{payload.get('mercado', {{}}).get('result', {{}}).get('analysis', 'Sin datos')[:1500]}</pre>
             </div>
-            
+
             <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h2 style="color: #2c3e50;">📌 Pinterest Trends</h2>
                 <pre style="background: #fff; padding: 15px; border-radius: 4px;">{payload.get('pinterest', {{}}).get('result', {{}}).get('analysis', 'Sin datos')[:1500]}</pre>
             </div>
-            
+
             <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h2 style="color: #2c3e50;">🎨 Creativo</h2>
                 <pre style="background: #fff; padding: 15px; border-radius: 4px;">{payload.get('creativo', {{}}).get('analysis', 'Sin datos')[:1500]}</pre>
             </div>
-            
+
             <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h2 style="color: #2c3e50;">🏪 Tienda</h2>
                 <pre style="background: #fff; padding: 15px; border-radius: 4px;">{payload.get('tienda', {{}}).get('plan', 'Sin datos')[:1500]}</pre>
             </div>
-            
+
             <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h2 style="color: #2c3e50;">🎯 Estrategia</h2>
                 <pre style="background: #fff; padding: 15px; border-radius: 4px;">{payload.get('estrategia', {{}}).get('analysis', 'Sin datos')[:1500]}</pre>
             </div>
-            
+
             <hr style="margin: 30px 0;">
             <p style="color: #999; font-size: 12px;">
                 Generado: {datetime.utcnow().isoformat()}<br>

@@ -59,10 +59,10 @@ class BaseAgent(ABC):
     async def execute(self, payload: dict[str, Any]) -> dict[str, Any]:
         """
         Execute agent logic.
-        
+
         Args:
             payload: Input payload
-            
+
         Returns:
             Result dictionary
         """
@@ -89,13 +89,13 @@ class BaseAgent(ABC):
     ) -> Any:
         """
         Execute operation with circuit breaker and retry logic.
-        
+
         Args:
             operation: Async function to execute
             service: External service name (for circuit breaker)
             *args: Positional arguments
             **kwargs: Keyword arguments
-            
+
         Returns:
             Operation result
         """
@@ -124,12 +124,12 @@ class BaseAgent(ABC):
     ) -> Any:
         """
         Execute operation with retry logic.
-        
+
         Args:
             operation: Async function to execute
             service: Service name (for logging)
             policy: Custom retry policy
-            
+
         Returns:
             Operation result
         """

@@ -127,7 +127,7 @@ def collect_metrics(self) -> dict:
     }
 
     # System metrics
-    cpu = psutil.cpu_percent(interval=0.1)
+    psutil.cpu_percent(interval=0.1)
     mem = psutil.virtual_memory()
     disk = psutil.disk_usage("/")
 

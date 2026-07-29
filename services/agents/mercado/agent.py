@@ -42,10 +42,10 @@ class MercadoAgent(BaseAgent):
     async def execute(self, payload: dict[str, Any]) -> dict[str, Any]:
         """
         Execute market analysis.
-        
+
         Args:
             payload: Optional input with keywords, date_range, geo
-            
+
         Returns:
             Market analysis report
         """
@@ -56,7 +56,7 @@ class MercadoAgent(BaseAgent):
             "vintage national park",
             "state pride apparel"
         ]
-        date_range = payload.get("date_range", "today 3-m") if payload else "today 3-m"
+        payload.get("date_range", "today 3-m") if payload else "today 3-m"
         geo = payload.get("geo", "US") if payload else "US"
 
         logger.info(f"Starting market analysis for keywords: {keywords}")
@@ -158,7 +158,7 @@ class MercadoAgent(BaseAgent):
 
         @retry_with_policy(policy=GROQ_POLICY)
         async def _analyze():
-            groq_client = Groq(api_key=self.settings.GROQ_API_KEY)
+            Groq(api_key=self.settings.GROQ_API_KEY)
 
             prompt = f"""Eres un experto en e-commerce de ropa con diseños gráficos en Etsy.
 Tu trabajo es analizar datos de mercado y dar recomendaciones estratégicas.
@@ -237,7 +237,6 @@ if __name__ == "__main__":
 
     async def test():
         agent = MercadoAgent()
-        result = await agent.execute({})
-        print(result)
+        await agent.execute({})
 
     asyncio.run(test())

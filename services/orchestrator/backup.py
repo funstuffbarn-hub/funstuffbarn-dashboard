@@ -17,13 +17,13 @@ settings = get_settings()
 def run_backup_job() -> dict:
     """
     Run daily backup job.
-    
+
     Returns:
         Dictionary with backup results
     """
     logger.info("Starting daily backup job")
 
-    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    datetime.utcnow().strftime("%Y%m%d_%H%M%S")
     backup_dir = Path(settings.BACKUP_DIR) / f"backup_{datetime.utcnow().strftime('%Y%m%d')}"
     backup_dir.mkdir(parents=True, exist_ok=True)
 
@@ -98,7 +98,7 @@ def cleanup_old_backups():
     if not backup_root.exists():
         return
 
-    now = datetime.utcnow()
+    datetime.utcnow()
 
     for item in sorted(backup_root.iterdir()):
         if not item.is_dir() and not item.suffix == ".tar.gz":

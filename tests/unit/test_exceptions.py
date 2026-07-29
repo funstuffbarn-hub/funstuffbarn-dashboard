@@ -1,25 +1,25 @@
 """
 Unit tests for shared/exceptions.py
 """
+from uuid import uuid4
+
 import pytest
-from uuid import uuid4, UUID
-from datetime import datetime
 
 from services.shared.exceptions import (
     AgentError,
-    ExternalAPIError,
-    ValidationError,
     CircuitBreakerOpenError,
-    RateLimitError,
     ConfigurationError,
+    ExternalAPIError,
+    RateLimitError,
     RetryExhaustedError,
     TimeoutError,
+    ValidationError,
 )
 
 
 class TestAgentError:
     """Tests for AgentError base class."""
-    
+
     def test_agent_error_creation(self):
         error = AgentError("Test error")
         assert str(error) == "Test error"
@@ -28,7 +28,7 @@ class TestAgentError:
         assert error.correlation_id is None
         assert error.details == {}
         assert error.recoverable is False
-    
+
     def test_agent_error_with_all_fields(self):
         corr_id = uuid4()
         error = AgentError(
@@ -43,7 +43,7 @@ class TestAgentError:
         assert error.correlation_id == corr_id
         assert error.details == {"key": "value"}
         assert error.recoverable is True
-    
+
     def test_str_representation(self):
         corr_id = uuid4()
         error = AgentError("Test", agent_type="mercado", correlation_id=corr_id)
@@ -55,7 +55,7 @@ class TestAgentError:
 
 class TestExternalAPIError:
     """Tests for ExternalAPIError."""
-    
+
     def test_external_api_error_creation(self):
         error = ExternalAPIError(
             message="API failed",
@@ -68,7 +68,7 @@ class TestExternalAPIError:
         assert error.status_code == 429
         assert error.response_body == "Rate limit exceeded"
         assert error.recoverable is True
-    
+
     def test_str_representation(self):
         error = ExternalAPIError("Failed", "groq", 429, "rate limited")
         str_repr = str(error)
@@ -78,7 +78,7 @@ class TestExternalAPIError:
 
 class TestValidationError:
     """Tests for ValidationError."""
-    
+
     def test_validation_error_creation(self):
         error = ValidationError(
             message="Invalid field",
@@ -89,7 +89,7 @@ class TestValidationError:
         assert error.field == "email"
         assert error.value == "invalid-email"
         assert error.recoverable is False
-    
+
     def test_str_representation(self):
         error = ValidationError("Invalid", field="email", value="bad")
         str_repr = str(error)
@@ -99,14 +99,14 @@ class TestValidationError:
 
 class TestCircuitBreakerOpenError:
     """Tests for CircuitBreakerOpenError."""
-    
+
     def test_creation(self):
         error = CircuitBreakerOpenError("groq", 60.0)
         assert "groq" in str(error)
         assert error.service_name == "groq"
         assert error.reset_timeout == 60.0
         assert error.recoverable is True
-    
+
     def test_with_correlation_id(self):
         corr_id = uuid4()
         error = CircuitBreakerOpenError("groq", 60.0, correlation_id=corr_id)
@@ -115,14 +115,14 @@ class TestCircuitBreakerOpenError:
 
 class TestRateLimitError:
     """Tests for RateLimitError."""
-    
+
     def test_creation(self):
         error = RateLimitError("groq", 30.0)
         assert "groq" in str(error)
         assert error.service == "groq"
         assert error.retry_after == 30.0
         assert error.recoverable is True
-    
+
     def test_str_representation(self):
         error = RateLimitError("etsy", 15.5)
         str_repr = str(error)
@@ -132,13 +132,13 @@ class TestRateLimitError:
 
 class TestConfigurationError:
     """Tests for ConfigurationError."""
-    
+
     def test_creation(self):
         error = ConfigurationError("Missing config", config_key="API_KEY")
         assert error.message == "Missing config"
         assert error.config_key == "API_KEY"
         assert error.recoverable is False
-    
+
     def test_str_representation(self):
         error = ConfigurationError("Missing", config_key="API_KEY")
         str_repr = str(error)
@@ -148,7 +148,7 @@ class TestConfigurationError:
 
 class TestRetryExhaustedError:
     """Tests for RetryExhaustedError."""
-    
+
     def test_creation(self):
         last_exc = ValueError("test error")
         error = RetryExhaustedError(
@@ -160,7 +160,7 @@ class TestRetryExhaustedError:
         assert error.attempts == 3
         assert error.last_exception == last_exc
         assert error.recoverable is False
-    
+
     def test_str_representation(self):
         error = RetryExhaustedError("Failed", 5, ValueError("test"))
         str_repr = str(error)
@@ -169,7 +169,7 @@ class TestRetryExhaustedError:
 
 class TestTimeoutError:
     """Tests for TimeoutError."""
-    
+
     def test_creation(self):
         error = TimeoutError(
             message="Operation timed out",
@@ -180,7 +180,7 @@ class TestTimeoutError:
         assert error.timeout == 30.0
         assert error.operation == "api_call"
         assert error.recoverable is True
-    
+
     def test_str_representation(self):
         error = TimeoutError("Timeout", 10.0, "api_call")
         str_repr = str(error)

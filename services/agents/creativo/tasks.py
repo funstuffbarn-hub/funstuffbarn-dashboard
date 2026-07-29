@@ -19,7 +19,7 @@ def run_creative_ideas(self, task_data: dict = None) -> dict:
     correlation_id = uuid4()
     logger.info(f"Starting creative ideas generation [{correlation_id}]")
 
-    started_at = datetime.utcnow()
+    datetime.utcnow()
 
     try:
         # Get inputs
@@ -71,8 +71,8 @@ def generate_creative_ideas(market_analysis: dict, pinterest_trends: dict) -> li
 
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-    market_summary = market_analysis.get("analysis", "")[:2000] if market_analysis else ""
-    pinterest_summary = str(pinterest_trends)[:2000] if pinterest_trends else ""
+    market_analysis.get("analysis", "")[:2000] if market_analysis else ""
+    str(pinterest_trends)[:2000] if pinterest_trends else ""
 
     prompt = f"""Eres el director creativo de una tienda de ropa con diseños gráficos en Etsy.
 Vende poleras y hoodies con diseños de parques nacionales de USA,
@@ -182,4 +182,3 @@ Sé concreto. Menciona diseños por nombre cuando sea posible."""
 
 if __name__ == "__main__":
     result = run_creative_ideas({})
-    print(result)

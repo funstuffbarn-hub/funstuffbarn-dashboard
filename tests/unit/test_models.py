@@ -1,48 +1,48 @@
 """
 Unit tests for shared/models.py
 """
-import pytest
 from datetime import datetime
-from uuid import uuid4, UUID
+from uuid import UUID, uuid4
+
+import pytest
 
 from services.shared.models import (
-    AgentType,
+    AgentResult,
     AgentStatus,
     AgentTask,
-    AgentResult,
-    AgentHealth,
-    TrendData,
-    CompetitionEntry,
-    MarketAnalysisReport,
-    DesignConcept,
-    CreativeReport,
-    PinterestTrend,
-    PinterestReport,
-    ListingSummary,
-    StoreReport,
-    ScoredDesign,
-    GapOpportunity,
-    SeasonalEvent,
-    StrategyReport,
-    EmailPayload,
-    DailyReportEmail,
-    EventType,
-    SystemEvent,
+    AgentType,
     APIResponse,
+    CompetitionEntry,
+    CreativeReport,
+    DailyReportEmail,
+    DesignConcept,
+    EmailPayload,
+    EventType,
+    GapOpportunity,
+    ListingSummary,
+    MarketAnalysisReport,
     PaginatedResponse,
+    PinterestReport,
+    PinterestTrend,
+    ScoredDesign,
+    SeasonalEvent,
+    StoreReport,
+    StrategyReport,
+    SystemEvent,
+    TrendData,
 )
 
 
 class TestEnums:
     """Test enum values."""
-    
+
     def test_agent_type_values(self):
         assert AgentType.MERCADO == "mercado"
         assert AgentType.CREATIVO == "creativo"
         assert AgentType.PINTEREST == "pinterest"
         assert AgentType.TIENDA == "tienda"
         assert AgentType.ESTRATEGIA == "estrategia"
-    
+
     def test_agent_status_values(self):
         assert AgentStatus.PENDING == "pending"
         assert AgentStatus.RUNNING == "running"
@@ -53,7 +53,7 @@ class TestEnums:
 
 class TestAgentTask:
     """Tests for AgentTask model."""
-    
+
     def test_agent_task_creation(self):
         task = AgentTask(
             agent_type="mercado",
@@ -66,11 +66,11 @@ class TestAgentTask:
         assert isinstance(task.id, UUID)
         assert isinstance(task.correlation_id, UUID)
         assert isinstance(task.created_at, datetime)
-    
+
     def test_agent_task_with_all_fields(self):
         correlation_id = uuid4()
         scheduled = datetime.utcnow()
-        
+
         task = AgentTask(
             id=uuid4(),
             agent_type="creativo",
@@ -85,7 +85,7 @@ class TestAgentTask:
 
 class TestAgentResult:
     """Tests for AgentResult model."""
-    
+
     def test_agent_result_success(self):
         result = AgentResult(
             task_id=uuid4(),
@@ -100,12 +100,12 @@ class TestAgentResult:
         assert result.success is True
         assert result.status == AgentStatus.COMPLETED
         assert result.result == {"data": "test"}
-    
+
     def test_agent_result_failure(self):
         correlation_id = uuid4()
         started = datetime.utcnow()
         completed = datetime.utcnow()
-        
+
         result = AgentResult(
             task_id=uuid4(),
             agent_type="creativo",
@@ -123,7 +123,7 @@ class TestAgentResult:
 
 class TestMarketModels:
     """Tests for market analysis models."""
-    
+
     def test_trend_data(self):
         trend = TrendData(
             keyword="national park shirt",
@@ -132,7 +132,7 @@ class TestMarketModels:
         )
         assert trend.keyword == "national park shirt"
         assert trend.interest == 75
-    
+
     def test_competition_entry(self):
         entry = CompetitionEntry(
             title="National Park Shirt",
@@ -144,11 +144,11 @@ class TestMarketModels:
         assert entry.title == "National Park Shirt"
         assert entry.price == 29.99
         assert entry.favorites == 150
-    
+
     def test_market_analysis_report(self):
         trend = TrendData(keyword="test", interest=50, date=datetime.utcnow())
         entry = CompetitionEntry(title="test", price=10.0, favorites=10, url="url", shop_name="shop")
-        
+
         report = MarketAnalysisReport(
             trends=[trend],
             competition=[entry],
@@ -165,7 +165,7 @@ class TestMarketModels:
 
 class TestCreativeModels:
     """Tests for creative models."""
-    
+
     def test_design_concept(self):
         concept = DesignConcept(
             name="TEST DESIGN",
@@ -180,7 +180,7 @@ class TestCreativeModels:
         assert concept.name == "TEST DESIGN"
         assert concept.primary_product == "polera"
         assert "hoodie" in concept.additional_products
-    
+
     def test_creative_report(self):
         concept = DesignConcept(
             name="TEST",
@@ -201,7 +201,7 @@ class TestCreativeModels:
 
 class TestPinterestModels:
     """Tests for Pinterest models."""
-    
+
     def test_pinterest_trend(self):
         trend = PinterestTrend(
             category="visual",
@@ -211,7 +211,7 @@ class TestPinterestModels:
         )
         assert trend.category == "visual"
         assert len(trend.keywords) == 2
-    
+
     def test_pinterest_report(self):
         trend = PinterestTrend(category="test", keywords=["k1"])
         report = PinterestReport(
@@ -226,7 +226,7 @@ class TestPinterestModels:
 
 class TestStoreModels:
     """Tests for store models."""
-    
+
     def test_listing_summary(self):
         listing = ListingSummary(
             listing_id="123",
@@ -240,7 +240,7 @@ class TestStoreModels:
         )
         assert listing.listing_id == "123"
         assert listing.price == 29.99
-    
+
     def test_store_report(self):
         listing = ListingSummary(
             listing_id="123",
@@ -264,7 +264,7 @@ class TestStoreModels:
 
 class TestStrategyModels:
     """Tests for strategy models."""
-    
+
     def test_scored_design(self):
         design = ScoredDesign(
             name="Test Design",
@@ -277,14 +277,14 @@ class TestStrategyModels:
         )
         assert design.score == 8.5
         assert design.action == "HACER"
-    
+
     def test_gap_opportunity(self):
         gap = GapOpportunity(
             theme="National Parks",
             reason="High demand, low competition",
         )
         assert gap.theme == "National Parks"
-    
+
     def test_seasonal_event(self):
         event = SeasonalEvent(
             week="Week 1",
@@ -294,9 +294,9 @@ class TestStrategyModels:
         )
         assert event.week == "Week 1"
         assert event.focus == "Teacher gifts"
-    
+
     def test_strategy_report(self):
-        design = ScoredDesign(
+        ScoredDesign(
             name="Test",
             score=8.0,
             primary_product="polera",
@@ -304,9 +304,9 @@ class TestStrategyModels:
             prompt="prompt",
             action="HACER",
         )
-        gap = GapOpportunity(theme="Parks", reason="High demand")
-        event = SeasonalEvent(week="Week 1", theme="Theme", focus="Focus", deadline_upload="Jan 1")
-        
+        GapOpportunity(theme="Parks", reason="High demand")
+        SeasonalEvent(week="Week 1", theme="Theme", focus="Focus", deadline_upload="Jan 1")
+
         report = StrategyReport(
             top_actions=[],
             scorecard=[ScoredDesign(name="D", score=8.0, primary_product="p", additional_products=[], prompt="p", action="HACER")],
@@ -320,7 +320,7 @@ class TestStrategyModels:
 
 class TestEmailModels:
     """Tests for email models."""
-    
+
     def test_email_payload(self):
         email = EmailPayload(
             to="test@test.com",
@@ -331,7 +331,7 @@ class TestEmailModels:
         )
         assert email.to == "test@test.com"
         assert email.attachments == ["file1.pdf"]
-    
+
     def test_daily_report_email(self):
         email = DailyReportEmail(
             date=datetime.utcnow(),
@@ -347,13 +347,13 @@ class TestEmailModels:
 
 class TestEventModels:
     """Tests for event models."""
-    
+
     def test_event_type(self):
         assert EventType.AGENT_STARTED == "agent.started"
         assert EventType.AGENT_COMPLETED == "agent.completed"
         assert EventType.AGENT_FAILED == "agent.failed"
         assert EventType.REPORT_GENERATED == "report.generated"
-    
+
     def test_system_event(self):
         event = SystemEvent(
             event_type=EventType.AGENT_STARTED,
@@ -368,7 +368,7 @@ class TestEventModels:
 
 class TestAPIResponseModels:
     """Tests for API response models."""
-    
+
     def test_api_response_success(self):
         response = APIResponse(
             success=True,
@@ -378,7 +378,7 @@ class TestAPIResponseModels:
         assert response.success is True
         assert response.data == {"key": "value"}
         assert response.message == "Success"
-    
+
     def test_api_response_error(self):
         response = APIResponse(
             success=False,
@@ -386,7 +386,7 @@ class TestAPIResponseModels:
         )
         assert response.success is False
         assert response.error == "Error message"
-    
+
     def test_paginated_response(self):
         response = PaginatedResponse(
             items=[1, 2, 3],

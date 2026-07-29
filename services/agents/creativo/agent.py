@@ -30,10 +30,10 @@ class CreativoAgent(BaseAgent):
     async def execute(self, payload: dict[str, Any]) -> dict[str, Any]:
         """
         Generate creative design ideas based on market analysis and Pinterest trends.
-        
+
         Args:
             payload: Contains market_analysis and pinterest_trends
-            
+
         Returns:
             Creative ideas report
         """
@@ -61,9 +61,9 @@ class CreativoAgent(BaseAgent):
 
         @retry_with_policy(policy=GROQ_POLICY)
         async def _call_groq():
-            groq_client = Groq(api_key=self.settings.GROQ_API_KEY)
+            Groq(api_key=self.settings.GROQ_API_KEY)
 
-            prompt = f"""Eres el director creativo de una tienda de ropa con diseños gráficos en Etsy.
+            f"""Eres el director creativo de una tienda de ropa con diseños gráficos en Etsy.
 Vende poleras y hoodies con diseños de parques nacionales de USA,
 y trucker hats con banderas y escudos de los 50 estados de USA.
 Producción via Printful, envío global.
@@ -112,32 +112,8 @@ Responde en español (excepto el prompt de AI que va en inglés)."""
 
         @retry_with_policy(policy=GROQ_POLICY)
         async def _call_groq():
-            groq_client = Groq(api_key=self.settings.GROQ_API_KEY)
+            Groq(api_key=self.settings.GROQ_API_KEY)
 
-            prompt = f"""Eres un estratega de producto para tiendas Etsy de ropa gráfica.
-
-PERFIL Y DISEÑOS EXISTENTES:
-{self.settings}
-
-Basándote solo en la información del perfil, recomienda:
-
-## EXPANSIONES DE PRODUCTO
-¿Cuáles de los diseños existentes deberían aplicarse a más tipos de producto?
-(ej: un diseño de polera → también en hoodie y sombrero)
-Sé específico: menciona el diseño por nombre y el producto sugerido.
-
-## VARIACIONES ESTRATÉGICAS
-¿Qué variaciones de los diseños más exitosos podrían generar nuevas ventas?
-(variaciones de color, inversión de paleta, versión minimalista, etc.)
-
-## COLECCIÓN TEMÁTICA
-¿Hay diseños existentes que podrían agruparse bajo un nombre de colección coherente?
-¿Cómo llamarías esa colección?
-
-## PRÓXIMO PRODUCTO A LANZAR
-De todas las expansiones sugeridas, ¿cuál tiene más potencial comercial inmediato y por qué?
-
-Sé concreto. Menciona diseños por nombre cuando sea posible."""
 
         return await self._call_groq(prompt, max_tokens=1200, temperature=0.7)
 
@@ -168,7 +144,6 @@ if __name__ == "__main__":
 
     async def test():
         agent = CreativoAgent()
-        result = await agent.execute({})
-        print(result)
+        await agent.execute({})
 
     asyncio.run(test())

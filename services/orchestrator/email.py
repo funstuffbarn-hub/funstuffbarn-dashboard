@@ -23,14 +23,14 @@ def send_report_email(
 ) -> bool:
     """
     Send report email via Gmail SMTP.
-    
+
     Args:
         to_email: Recipient email
         subject: Email subject
         body: Plain text body
         html_body: Optional HTML body
         attachments: List of file paths to attach
-    
+
     Returns:
         True if sent successfully, False otherwise
     """

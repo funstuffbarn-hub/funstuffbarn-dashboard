@@ -13,12 +13,12 @@ settings = get_settings()
 def cleanup_old_reports() -> dict:
     """
     Clean up old report files based on retention policy.
-    
+
     Retention policy:
     - Daily reports: keep 30 days
     - Weekly reports (Mondays): keep 12 weeks
     - Monthly reports (1st of month): keep 12 months
-    
+
     Returns:
         Dictionary with cleanup results
     """
@@ -30,7 +30,7 @@ def cleanup_old_reports() -> dict:
         logger.warning(f"Reports directory not found: {reportes_dir}")
         return {"cleaned": 0, "errors": ["Directory not found"]}
 
-    now = datetime.utcnow()
+    datetime.utcnow()
     deleted = 0
     errors = []
 
@@ -87,7 +87,7 @@ def cleanup_prompt_archive() -> dict:
     if not archive_dir.exists():
         return {"cleaned": 0, "errors": ["Directory not found"]}
 
-    now = datetime.utcnow()
+    datetime.utcnow()
     deleted = 0
     errors = []
 

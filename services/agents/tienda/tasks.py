@@ -167,4 +167,3 @@ Una sola cosa concreta para hacer hoy en menos de 15 minutos."""
 
 if __name__ == "__main__":
     result = run_tienda({})
-    print(result)

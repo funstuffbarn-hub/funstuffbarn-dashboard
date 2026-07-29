@@ -158,7 +158,6 @@ def setup_periodic_tasks(sender, **kwargs):
 @app.task(bind=True, ignore_result=True)
 def debug_task(self):
     """Debug task for testing."""
-    print(f"Request: {self.request!r}")
 
 
 if __name__ == "__main__":

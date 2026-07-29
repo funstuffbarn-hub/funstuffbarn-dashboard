@@ -20,7 +20,6 @@ try:
     ARCHIVO_DISPONIBLE = True
 except ImportError:
     ARCHIVO_DISPONIBLE = False
-    print("  ⚠️  prompt_archive no disponible, saltando archivado automático")
 
 HEADERS = {
     "User-Agent": (
@@ -54,7 +53,6 @@ def ejecutar() -> str:
 
     # Archivar tendencias como prompts visuales
     if ARCHIVO_DISPONIBLE:
-        print("  📁 Archivando tendencias Pinterest...")
         archivar_tendencias_pinterest(analisis, fecha)
 
     return analisis
@@ -70,7 +68,6 @@ def cargar_perfil() -> str:
 
 def leer_pinterest_trends() -> str:
     """Lee la página de tendencias oficiales de Pinterest."""
-    print("  📌 Leyendo Pinterest Trends...")
     try:
         url = "https://trends.pinterest.com"
         r = requests.get(url, headers=HEADERS, timeout=12)
@@ -88,7 +85,6 @@ def leer_pinterest_trends() -> str:
 
 def buscar_tendencias_pinterest_via_google(keywords: list) -> str:
     """Busca pins y tendencias de Pinterest usando Google."""
-    print("  📌 Buscando tendencias en Pinterest via Google...")
     resultados = []
     for kw in keywords:
         try:
@@ -148,10 +144,5 @@ Sé específico y visual en tus descripciones. Responde en español."""
 
 
 if __name__ == "__main__":
-    print(f"\n{'='*55}")
-    print("  AGENTE PINTEREST — TENDENCIAS VISUALES")
-    print(f"{'='*55}\n")
     resultado = ejecutar()
-    print(resultado)
     fecha = datetime.now().strftime("%Y-%m-%d")
-    print(f"\n✅ Guardado en reportes/pinterest_{fecha}.txt")
