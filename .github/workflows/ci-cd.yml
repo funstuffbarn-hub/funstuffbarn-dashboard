@@ -13,6 +13,7 @@ env:
 permissions:
   contents: read
   security-events: write
+  actions: read
 
 jobs:
   lint:
@@ -118,6 +119,7 @@ jobs:
     permissions:
       security-events: write
       contents: read
+      actions: read
     steps:
       - uses: actions/checkout@v4
       
@@ -134,12 +136,12 @@ jobs:
       - name: Run Bandit
         run: |
           pip install bandit -q
-          bandit -r services/ -f json -o bandit-results.json || true
+          bandit -r services/ -f sarif -o bandit-results.sarif || true
       
       - name: Upload Bandit results
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: 'bandit-results.json'
+          sarif_file: 'bandit-results.sarif'
 
   docker:
     name: Build & Push Docker Image
