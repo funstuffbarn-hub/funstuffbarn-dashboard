@@ -10,7 +10,7 @@ from datetime import datetime
 from typing import Any
 from uuid import uuid4
 
-from celery import Task
+from celery import Celery, Task
 
 from services.shared.config import settings
 from services.shared.exceptions import (
@@ -340,7 +340,6 @@ agent_registry = AgentRegistry()
 
 def create_celery_app() -> Celery:
     """Create and configure Celery application."""
-    from celery import Celery
 
     app = Celery("funstuffbarn_agents")
 
