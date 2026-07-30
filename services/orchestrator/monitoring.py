@@ -18,7 +18,7 @@ settings = get_settings()
 
 
 @shared_task(bind=True, name="services.orchestrator.monitoring.health_check")
-def health_check(self) -> dict[str, Any]:
+async def health_check(self) -> dict[str, Any]:
     """
     Comprehensive health check for all system components.
     """
@@ -65,7 +65,7 @@ def health_check(self) -> dict[str, Any]:
     if cpu_percent > 95 and results["overall"] == "healthy":
         results["overall"] = "warning"
 
-    # 4. Redis
+    # 5. Redis
     try:
         import redis
         r = redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379/0"))
@@ -81,8 +81,7 @@ def health_check(self) -> dict[str, Any]:
         results["overall"] = "critical"
 
     # 4. Circuit Breakers
-    import asyncio
-    cb_stats = asyncio.run(circuit_breaker_registry.get_all_stats())
+    cb_stats = await circuit_breaker_registry.get_all_stats()
     cb_healthy = all(v["state"] != "open" for v in cb_stats.values())
     results["checks"]["circuit_breakers"] = {
         "status": "healthy" if cb_healthy else "degraded",
@@ -93,9 +92,9 @@ def health_check(self) -> dict[str, Any]:
 
     # 5. Disk space for data directories
     data_dirs = [
-        ("reportes", "/Users/javiermaldonadocorreaair/agente-etsy/reportes"),
-        ("prompt_archive", "/Users/javiermaldonadocorreaair/agente-etsy/prompt_archive"),
-        ("logs", "/Users/javiermaldonadocorreaair/agente-etsy/logs"),
+        ("reportes", "/app/reportes"),
+        ("prompt_archive", "/app/prompt_archive"),
+        ("logs", "/app/logs"),
     ]
 
     for name, path in data_dirs:
