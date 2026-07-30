@@ -75,8 +75,8 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("/health")
 async def health_check():
     """Health check endpoint for monitoring."""
-    from services.orchestrator.monitoring import health_check
-    return await health_check()
+    from services.orchestrator.monitoring import health_check_async
+    return await health_check_async()
 
 
 @app.get("/metrics")

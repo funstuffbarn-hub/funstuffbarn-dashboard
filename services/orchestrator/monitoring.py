@@ -7,7 +7,6 @@ from typing import Any
 
 import psutil
 from celery import shared_task
-from celery.schedules import crontab
 
 from services.shared.config import get_settings
 from services.shared.logging import get_logger
@@ -17,10 +16,10 @@ logger = get_logger(__name__)
 settings = get_settings()
 
 
-@shared_task(bind=True, name="services.orchestrator.monitoring.health_check")
-async def health_check(self) -> dict[str, Any]:
+async def _perform_health_check() -> dict[str, Any]:
     """
     Comprehensive health check for all system components.
+    This is the core logic shared by both the Celery task and the FastAPI endpoint.
     """
     logger.info("Running health check")
 
@@ -111,8 +110,21 @@ async def health_check(self) -> dict[str, Any]:
     return results
 
 
-@shared_task(bind=True, name="services.orchestrator.monitoring.collect_metrics")
-def collect_metrics(self) -> dict:
+@shared_task(bind=True, name="services.orchestrator.monitoring.health_check")
+def health_check(self) -> dict[str, Any]:
+    """
+    Celery task wrapper for health check.
+    Runs the async health check in an event loop.
+    """
+    import asyncio
+    return asyncio.run(_perform_health_check())
+
+
+async def health_check_async() -> dict[str, Any]:
+    """
+    Async health check function for FastAPI endpoint.
+    """
+    return await _perform_health_check()
     """
     Collect system metrics for Prometheus/Grafana.
     """
