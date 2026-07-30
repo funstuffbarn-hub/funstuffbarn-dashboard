@@ -81,7 +81,8 @@ def health_check(self) -> dict[str, Any]:
         results["overall"] = "critical"
 
     # 4. Circuit Breakers
-    cb_stats = circuit_breaker_registry.get_all_stats()
+    import asyncio
+    cb_stats = asyncio.run(circuit_breaker_registry.get_all_stats())
     cb_healthy = all(v["state"] != "open" for v in cb_stats.values())
     results["checks"]["circuit_breakers"] = {
         "status": "healthy" if cb_healthy else "degraded",
