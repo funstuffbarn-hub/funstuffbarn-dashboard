@@ -1,0 +1,118 @@
+# Northflank Configuration for FunStuffBarn Agent-Etsy System (2 Services - Free Tier)
+# Deploy via UI at https://app.northflank.com
+
+project: funstuffbarn-dashboard
+version: "2.0.0"
+
+services:
+  # Main API Service (Web)
+  - name: app
+    type: web
+    dockerfile: Dockerfile
+    buildContext: .
+    # Uses Procfile 'web' process automatically
+    ports:
+      - port: 8080
+        protocol: HTTP
+        expose: true
+    env:
+      - key: PORT
+        value: "8080"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PYTHONDONTWRITEBYTECODE
+        value: "1"
+      - key: ENVIRONMENT
+        value: "production"
+      - key: REDIS_URL
+        value: ${REDIS_URL}
+      - key: CELERY_BROKER_URL
+        value: ${CELERY_BROKER_URL}
+      - key: CELERY_RESULT_BACKEND
+        value: ${CELERY_RESULT_BACKEND}
+      # Core API Keys (from Northflank secrets)
+      - key: GROQ_API_KEY
+        value: ${GROQ_API_KEY}
+      - key: ETSY_API_KEY
+        value: ${ETSY_API_KEY}
+      - key: ETSY_API_SECRET
+        value: ${ETSY_API_SECRET}
+      - key: ETSY_SHOP_ID
+        value: ${ETSY_SHOP_ID}
+      - key: PRINTFUL_TOKEN
+        value: ${PRINTFUL_TOKEN}
+      - key: PRINTFUL_STORE_ID
+        value: ${PRINTFUL_STORE_ID}
+      - key: GMAIL_USER
+        value: ${GMAIL_USER}
+      - key: GMAIL_PASSWORD
+        value: ${GMAIL_PASSWORD}
+      - key: EMAIL_DESTINATION
+        value: ${EMAIL_DESTINATION}
+      # Optional configs
+      - key: LOG_LEVEL
+        value: "INFO"
+      - key: LOG_FORMAT
+        value: "json"
+    scaling:
+      minReplicas: 1
+      maxReplicas: 2
+    healthCheck:
+      path: /health
+      port: 8080
+      interval: 30
+      timeout: 10
+      failureThreshold: 3
+    compute:
+      instanceType: F1  # Free tier
+    regions:
+      - us-east-1
+
+  # Unified Worker Service (runs worker + clock via Procfile)
+  - name: workers
+    type: worker
+    dockerfile: Dockerfile
+    buildContext: .
+    # Uses Procfile 'worker' and 'clock' processes automatically
+    env:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PYTHONDONTWRITEBYTECODE
+        value: "1"
+      - key: ENVIRONMENT
+        value: "production"
+      - key: REDIS_URL
+        value: ${REDIS_URL}
+      - key: CELERY_BROKER_URL
+        value: ${CELERY_BROKER_URL}
+      - key: CELERY_RESULT_BACKEND
+        value: ${CELERY_RESULT_BACKEND}
+      - key: GROQ_API_KEY
+        value: ${GROQ_API_KEY}
+      - key: ETSY_API_KEY
+        value: ${ETSY_API_KEY}
+      - key: ETSY_API_SECRET
+        value: ${ETSY_API_SECRET}
+      - key: ETSY_SHOP_ID
+        value: ${ETSY_SHOP_ID}
+      - key: PRINTFUL_TOKEN
+        value: ${PRINTFUL_TOKEN}
+      - key: PRINTFUL_STORE_ID
+        value: ${PRINTFUL_STORE_ID}
+      - key: LOG_LEVEL
+        value: "INFO"
+    scaling:
+      minReplicas: 1
+      maxReplicas: 1
+    compute:
+      instanceType: F1  # Free tier
+    regions:
+      - us-east-1
+
+# Redis Addon (Free Tier - 256 MB)
+addons:
+  - name: funstuffbarn-redis
+    type: redis
+    plan: free
+    region: us-east-1
+    version: "7"
